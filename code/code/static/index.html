@@ -1,13 +1,23 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>新闻真实性核查系统</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5; min-height: 100vh; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
 
         .navbar {
             background: #4a90e2;
@@ -20,8 +30,16 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
-        .navbar-brand { font-size: 1.5em; font-weight: bold; }
-        .navbar-menu { display: flex; gap: 30px; }
+        .navbar-brand {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .navbar-menu {
+            display: flex;
+            gap: 30px;
+        }
+
         .navbar-menu a {
             color: white !important;
             text-decoration: none !important;
@@ -30,47 +48,204 @@
             background: none !important;
             border: none !important;
         }
-        .navbar-menu a:hover { opacity: 0.8; color: white !important; }
-        .navbar-menu a:active { color: white !important; opacity: 1; background: none !important; }
-        .navbar-menu a:visited { color: white !important; }
-        .navbar-menu a:focus { color: white !important; outline: none !important; }
 
-        .navbar-user { display: flex; align-items: center; gap: 15px; }
-        .user-avatar { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; }
-        .logout-btn { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.5); color: white; padding: 8px 16px; border-radius: 5px; cursor: pointer; }
-        .logout-btn:hover { background: rgba(255,255,255,0.3); }
+        .navbar-menu a:hover {
+            opacity: 0.8;
+            color: white !important;
+        }
 
-        .login-container { display: flex; justify-content: center; align-items: center; min-height: 100vh; background: #f5f5f5; }
-        .login-box { background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); padding: 50px; max-width: 400px; width: 100%; }
-        .login-box h1 { text-align: center; color: #333; margin-bottom: 30px; }
+        .navbar-menu a:active {
+            color: white !important;
+            opacity: 1;
+            background: none !important;
+        }
 
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; margin-bottom: 8px; color: #333; font-weight: 500; }
-        .form-group input, .form-group textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 1em; }
-        .form-group input:focus, .form-group textarea:focus { outline: none; border-color: #4a90e2; }
+        .navbar-menu a:visited {
+            color: white !important;
+        }
 
-        button { background: #4a90e2; color: white; padding: 12px 24px; border: none; border-radius: 5px; cursor: pointer; font-size: 1em; }
-        button:hover { background: #4a90e2; }
-        button:active { background: #4a90e2; }
-        
-        .main-content { padding: 40px; max-width: 1400px; margin: 0 auto; }
-        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px; }
-        .stat-card { color: white; padding: 25px; border-radius: 12px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .stat-card h3 { font-size: 2.5em; margin-bottom: 10px; }
-        
-        .tabs { display: flex; gap: 10px; margin-bottom: 30px; border-bottom: 2px solid #eee; }
-        .tab-btn { padding: 12px 24px; border: none; background: none; cursor: pointer; color: #666; border-bottom: 3px solid transparent; }
-        .tab-btn.active { color: #667eea; border-bottom-color: #667eea; }
-        
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-        
-        .card { background: white; border-radius: 15px; padding: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); margin-bottom: 20px; }
-        .message { padding: 15px; border-radius: 5px; margin-bottom: 20px; }
-        .message.success { background: #d4edda; color: #155724; }
-        .message.error { background: #f8d7da; color: #721c24; }
+        .navbar-menu a:focus {
+            color: white !important;
+            outline: none !important;
+        }
+
+        .navbar-user {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #f5f5f5;
+        }
+
+        .login-box {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 50px;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .login-box h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #4a90e2;
+        }
+
+        button {
+            background: #4a90e2;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        button:hover {
+            background: #4a90e2;
+        }
+
+        button:active {
+            background: #4a90e2;
+        }
+
+        .main-content {
+            padding: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card h3 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            color: #666;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-btn.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 20px;
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
     </style>
 </head>
+
 <body>
     <!-- 登录页面 -->
     <div id="loginPage" class="login-container">
@@ -91,15 +266,18 @@
             <div style="margin-top: 25px; padding-top: 20px; border-top: 1px solid #e0e0e0;">
                 <p style="text-align: center; color: #666; font-size: 0.9em; margin-bottom: 15px;">快捷登录（测试账号）</p>
                 <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
-                    <button onclick="quickLogin('admin', 'admin123')" style="background: #667eea; padding: 12px 8px; font-size: 0.9em; display: flex; flex-direction: column; align-items: center; gap: 5px;">
+                    <button onclick="quickLogin('admin', 'admin123')"
+                        style="background: #667eea; padding: 12px 8px; font-size: 0.9em; display: flex; flex-direction: column; align-items: center; gap: 5px;">
                         <span style="font-size: 1.5em;">👑</span>
                         <span>管理员</span>
                     </button>
-                    <button onclick="quickLogin('verifier', 'verifier123')" style="background: #f093fb; padding: 12px 8px; font-size: 0.9em; display: flex; flex-direction: column; align-items: center; gap: 5px;">
+                    <button onclick="quickLogin('verifier', 'verifier123')"
+                        style="background: #f093fb; padding: 12px 8px; font-size: 0.9em; display: flex; flex-direction: column; align-items: center; gap: 5px;">
                         <span style="font-size: 1.5em;">🔍</span>
                         <span>核查员</span>
                     </button>
-                    <button onclick="quickLogin('testuser', 'test123')" style="background: #4facfe; padding: 12px 8px; font-size: 0.9em; display: flex; flex-direction: column; align-items: center; gap: 5px;">
+                    <button onclick="quickLogin('testuser', 'test123')"
+                        style="background: #4facfe; padding: 12px 8px; font-size: 0.9em; display: flex; flex-direction: column; align-items: center; gap: 5px;">
                         <span style="font-size: 1.5em;">👤</span>
                         <span>普通用户</span>
                     </button>
@@ -107,7 +285,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- 主应用 -->
     <div id="mainApp" style="display: none;">
         <div class="navbar">
@@ -118,12 +296,13 @@
                 <a onclick="switchTab('history')">📋 查看提交历史</a>
             </div>
             <div class="navbar-user">
-                <div class="user-avatar" id="userInitial" onclick="switchTab('profile')" style="cursor: pointer;" title="个人信息">A</div>
+                <div class="user-avatar" id="userInitial" onclick="switchTab('profile')" style="cursor: pointer;"
+                    title="个人信息">A</div>
                 <span id="currentUser" onclick="switchTab('profile')" style="cursor: pointer;" title="个人信息">用户</span>
                 <button class="logout-btn" onclick="logout()">登出</button>
             </div>
         </div>
-        
+
         <div class="main-content">
             <div id="submit" class="tab-content active">
                 <div class="card">
@@ -131,25 +310,32 @@
                     <div id="submitMessage" class="message" style="display:none;"></div>
 
                     <!-- 新增：提交模式选择 -->
-                    <div style="background: #f0f7ff; padding: 20px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid #4a90e2;">
+                    <div
+                        style="background: #f0f7ff; padding: 20px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid #4a90e2;">
                         <h3 style="margin-bottom: 15px; color: #4a90e2;">📋 提交模式</h3>
                         <div style="display: flex; gap: 20px;">
-                            <label style="display: flex; align-items: center; cursor: pointer; padding: 10px; background: white; border-radius: 8px; flex: 1;">
-                                <input type="radio" name="submitMode" value="normal" checked onchange="updateSubmitMode()" style="margin-right: 10px; width: 20px; height: 20px;">
+                            <label
+                                style="display: flex; align-items: center; cursor: pointer; padding: 10px; background: white; border-radius: 8px; flex: 1;">
+                                <input type="radio" name="submitMode" value="normal" checked
+                                    onchange="updateSubmitMode()"
+                                    style="margin-right: 10px; width: 20px; height: 20px;">
                                 <div>
                                     <strong>📤 正式提交</strong>
                                     <p style="margin: 5px 0 0 0; font-size: 0.9em; color: #666;">提交新闻进行正式审核</p>
                                 </div>
                             </label>
-                            <label style="display: flex; align-items: center; cursor: pointer; padding: 10px; background: white; border-radius: 8px; flex: 1;">
-                                <input type="radio" name="submitMode" value="selfcheck" onchange="updateSubmitMode()" style="margin-right: 10px; width: 20px; height: 20px;">
+                            <label
+                                style="display: flex; align-items: center; cursor: pointer; padding: 10px; background: white; border-radius: 8px; flex: 1;">
+                                <input type="radio" name="submitMode" value="selfcheck" onchange="updateSubmitMode()"
+                                    style="margin-right: 10px; width: 20px; height: 20px;">
                                 <div>
                                     <strong>🔍 自检模式</strong>
                                     <p style="margin: 5px 0 0 0; font-size: 0.9em; color: #666;">发布前预先检测，不进入正式审核流程</p>
                                 </div>
                             </label>
                         </div>
-                        <div id="selfCheckTip" style="display: none; margin-top: 15px; padding: 12px; background: #fff3cd; border-radius: 5px; color: #856404;">
+                        <div id="selfCheckTip"
+                            style="display: none; margin-top: 15px; padding: 12px; background: #fff3cd; border-radius: 5px; color: #856404;">
                             💡 <strong>自检模式说明：</strong>适用于媒体机构发布新闻前的预检，AI会分析内容真实性，但不会进入正式审核流程，也不会被核查员审核。
                         </div>
                     </div>
@@ -164,8 +350,10 @@
                     </div>
                     <div class="form-group">
                         <label>上传文件 (Word/PDF/图片/视频/音频)</label>
-                        <input type="file" id="newsFile" accept=".doc,.docx,.pdf,.jpg,.jpeg,.png,.gif,.mp4,.avi,.mov,.mp3,.wav">
-                        <small style="color: #666; display: block; margin-top: 5px;">支持格式: Word(.doc/.docx), PDF, 图片(jpg/png/gif), 视频(mp4/avi/mov), 音频(mp3/wav)</small>
+                        <input type="file" id="newsFile"
+                            accept=".doc,.docx,.pdf,.jpg,.jpeg,.png,.gif,.mp4,.avi,.mov,.mp3,.wav">
+                        <small style="color: #666; display: block; margin-top: 5px;">支持格式: Word(.doc/.docx), PDF,
+                            图片(jpg/png/gif), 视频(mp4/avi/mov), 音频(mp3/wav)</small>
                     </div>
                     <button onclick="submitNews()" id="submitBtn">提交新闻</button>
                 </div>
@@ -179,25 +367,33 @@
                     <div id="mediaSubmitMessage" class="message" style="display:none;"></div>
 
                     <!-- 新增：提交模式选择 -->
-                    <div style="background: #f0f7ff; padding: 20px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid #4a90e2;">
+                    <div
+                        style="background: #f0f7ff; padding: 20px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid #4a90e2;">
                         <h3 style="margin-bottom: 15px; color: #4a90e2;">📋 提交模式</h3>
                         <div style="display: flex; gap: 20px;">
-                            <label style="display: flex; align-items: center; cursor: pointer; padding: 10px; background: white; border-radius: 8px; flex: 1;">
-                                <input type="radio" name="mediaSubmitMode" value="normal" checked onchange="updateMediaSubmitMode()" style="margin-right: 10px; width: 20px; height: 20px;">
+                            <label
+                                style="display: flex; align-items: center; cursor: pointer; padding: 10px; background: white; border-radius: 8px; flex: 1;">
+                                <input type="radio" name="mediaSubmitMode" value="normal" checked
+                                    onchange="updateMediaSubmitMode()"
+                                    style="margin-right: 10px; width: 20px; height: 20px;">
                                 <div>
                                     <strong>📤 正式提交</strong>
                                     <p style="margin: 5px 0 0 0; font-size: 0.9em; color: #666;">提交视频/音频进行正式审核</p>
                                 </div>
                             </label>
-                            <label style="display: flex; align-items: center; cursor: pointer; padding: 10px; background: white; border-radius: 8px; flex: 1;">
-                                <input type="radio" name="mediaSubmitMode" value="selfcheck" onchange="updateMediaSubmitMode()" style="margin-right: 10px; width: 20px; height: 20px;">
+                            <label
+                                style="display: flex; align-items: center; cursor: pointer; padding: 10px; background: white; border-radius: 8px; flex: 1;">
+                                <input type="radio" name="mediaSubmitMode" value="selfcheck"
+                                    onchange="updateMediaSubmitMode()"
+                                    style="margin-right: 10px; width: 20px; height: 20px;">
                                 <div>
                                     <strong>🔍 自检模式</strong>
                                     <p style="margin: 5px 0 0 0; font-size: 0.9em; color: #666;">发布前预先检测，不进入审核流程</p>
                                 </div>
                             </label>
                         </div>
-                        <div id="mediaModeDescription" style="margin-top: 15px; padding: 12px; background: white; border-radius: 8px; border-left: 3px solid #28a745;">
+                        <div id="mediaModeDescription"
+                            style="margin-top: 15px; padding: 12px; background: white; border-radius: 8px; border-left: 3px solid #28a745;">
                             <strong>📤 正式提交模式</strong>
                             <p style="margin: 5px 0 0 0; color: #666; font-size: 0.9em;">
                                 提交的视频/音频将进入正式审核流程，核查员会进行人工复核。
@@ -215,7 +411,8 @@
                     </div>
                     <div class="form-group">
                         <label>上传文件 (视频或音频)</label>
-                        <input type="file" id="mediaFile" accept=".mp4,.avi,.mov,.mkv,.flv,.wmv,.mp3,.wav,.aac,.flac,.m4a">
+                        <input type="file" id="mediaFile"
+                            accept=".mp4,.avi,.mov,.mkv,.flv,.wmv,.mp3,.wav,.aac,.flac,.m4a">
                         <small style="color: #666; display: block; margin-top: 5px;">
                             视频格式: MP4, AVI, MOV, MKV, FLV, WMV<br>
                             音频格式: MP3, WAV, AAC, FLAC, M4A<br>
@@ -232,7 +429,8 @@
                 <div class="card">
                     <h2>📋 我的提交历史</h2>
                     <div style="margin-bottom: 20px;">
-                        <button onclick="loadSubmissionHistory()" style="padding: 10px 20px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                        <button onclick="loadSubmissionHistory()"
+                            style="padding: 10px 20px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer;">
                             🔄 刷新历史
                         </button>
                     </div>
@@ -247,13 +445,15 @@
                         <div id="profileInfo" style="margin-bottom: 30px;">
                             <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
                                 <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 20px;">
-                                    <div class="user-avatar" id="profileAvatar" style="width: 80px; height: 80px; font-size: 2em;">A</div>
+                                    <div class="user-avatar" id="profileAvatar"
+                                        style="width: 80px; height: 80px; font-size: 2em;">A</div>
                                     <div>
                                         <h3 id="profileUsername" style="margin: 0 0 5px 0;">用户名</h3>
                                         <p id="profileEmail" style="margin: 0; color: #666;">邮箱</p>
                                     </div>
                                 </div>
-                                <div style="display: grid; grid-template-columns: 120px 1fr; gap: 10px; font-size: 0.95em;">
+                                <div
+                                    style="display: grid; grid-template-columns: 120px 1fr; gap: 10px; font-size: 0.95em;">
                                     <div style="color: #666;">用户ID:</div>
                                     <div id="profileId">-</div>
                                     <div style="color: #666;">注册时间:</div>
@@ -269,26 +469,32 @@
                             <form id="updateProfileForm" onsubmit="updateProfile(event)">
                                 <div style="margin-bottom: 15px;">
                                     <label style="display: block; margin-bottom: 5px; color: #666;">用户名</label>
-                                    <input type="text" id="newUsername" placeholder="留空则不修改" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                                    <input type="text" id="newUsername" placeholder="留空则不修改"
+                                        style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
                                 </div>
                                 <div style="margin-bottom: 15px;">
                                     <label style="display: block; margin-bottom: 5px; color: #666;">邮箱</label>
-                                    <input type="email" id="newEmail" placeholder="留空则不修改" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                                    <input type="email" id="newEmail" placeholder="留空则不修改"
+                                        style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
                                 </div>
                                 <div style="margin-bottom: 15px;">
                                     <label style="display: block; margin-bottom: 5px; color: #666;">当前密码</label>
-                                    <input type="password" id="currentPassword" placeholder="修改密码时必填" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                                    <input type="password" id="currentPassword" placeholder="修改密码时必填"
+                                        style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
                                 </div>
                                 <div style="margin-bottom: 15px;">
                                     <label style="display: block; margin-bottom: 5px; color: #666;">新密码</label>
-                                    <input type="password" id="newPassword" placeholder="留空则不修改" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                                    <input type="password" id="newPassword" placeholder="留空则不修改"
+                                        style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
                                 </div>
                                 <div style="margin-bottom: 15px;">
                                     <label style="display: block; margin-bottom: 5px; color: #666;">确认新密码</label>
-                                    <input type="password" id="confirmPassword" placeholder="留空则不修改" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                                    <input type="password" id="confirmPassword" placeholder="留空则不修改"
+                                        style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
                                 </div>
                                 <div id="profileMessage" style="margin-bottom: 15px;"></div>
-                                <button type="submit" style="width: 100%; padding: 12px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1em;">
+                                <button type="submit"
+                                    style="width: 100%; padding: 12px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1em;">
                                     💾 保存修改
                                 </button>
                             </form>
@@ -300,7 +506,8 @@
             <div id="api" class="tab-content">
                 <div class="card">
                     <h2>🔌 API接口文档</h2>
-                    <div style="background: #f5f7fa; padding: 20px; border-radius: 10px; max-height: 600px; overflow-y: auto;">
+                    <div
+                        style="background: #f5f7fa; padding: 20px; border-radius: 10px; max-height: 600px; overflow-y: auto;">
                         <h3>📚 完整API列表</h3>
 
                         <h4 style="color: #667eea; margin-top: 15px;">认证接口</h4>
@@ -339,7 +546,7 @@ GET  /redoc         (ReDoc)</pre>
             </div>
         </div>
     </div>
-    
+
     <script>
         let token = localStorage.getItem('token');
         let currentUser = localStorage.getItem('currentUser');
@@ -347,28 +554,28 @@ GET  /redoc         (ReDoc)</pre>
         // 如果已登录，检查是否是管理员
         if (token) {
             fetch('/api/users/me', {
-                headers: {'Authorization': 'Bearer ' + token}
+                headers: { 'Authorization': 'Bearer ' + token }
             })
-            .then(r => r.json())
-            .then(user => {
-                if (user.is_admin) {
-                    // 管理员自动跳转到管理端
-                    window.location.href = '/admin';
-                } else if (user.is_verifier) {
-                    // 核查员自动跳转到核查员页面
-                    window.location.href = '/verifier';
-                } else {
-                    // 普通用户显示用户端
-                    showMainApp();
-                }
-            })
-            .catch(e => {
-                // 如果token失效，清除并显示登录页
-                localStorage.removeItem('token');
-                localStorage.removeItem('currentUser');
-            });
+                .then(r => r.json())
+                .then(user => {
+                    if (user.is_admin) {
+                        // 管理员自动跳转到管理端
+                        window.location.href = '/admin';
+                    } else if (user.is_verifier) {
+                        // 核查员自动跳转到核查员页面
+                        window.location.href = '/verifier';
+                    } else {
+                        // 普通用户显示用户端
+                        showMainApp();
+                    }
+                })
+                .catch(e => {
+                    // 如果token失效，清除并显示登录页
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('currentUser');
+                });
         }
-        
+
         // 快捷登录函数
         function quickLogin(username, password) {
             document.getElementById('loginUsername').value = username;
@@ -387,69 +594,69 @@ GET  /redoc         (ReDoc)</pre>
 
             fetch('/api/auth/login', {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({username, password})
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
             })
-            .then(r => r.json())
-            .then(data => {
-                if (data.access_token) {
-                    token = data.access_token;
-                    currentUser = username;
-                    localStorage.setItem('token', token);
-                    localStorage.setItem('currentUser', username);
+                .then(r => r.json())
+                .then(data => {
+                    if (data.access_token) {
+                        token = data.access_token;
+                        currentUser = username;
+                        localStorage.setItem('token', token);
+                        localStorage.setItem('currentUser', username);
 
-                    // 检查是否是管理员
-                    fetch('/api/users/me', {
-                        headers: {'Authorization': 'Bearer ' + token}
-                    })
-                    .then(r => r.json())
-                    .then(user => {
-                        if (user.is_admin) {
-                            // 管理员跳转到管理端
-                            showMessage('loginMessage', '👑 管理员登录成功，正在跳转...', 'success');
-                            setTimeout(() => {
-                                window.location.href = '/admin';
-                            }, 500);
-                        } else if (user.is_verifier) {
-                            // 核查员跳转到核查员页面
-                            showMessage('loginMessage', '🔍 核查员登录成功，正在跳转...', 'success');
-                            setTimeout(() => {
-                                window.location.href = '/verifier';
-                            }, 500);
-                        } else {
-                            // 普通用户显示用户端
-                            showMessage('loginMessage', '👤 登录成功！', 'success');
-                            setTimeout(() => {
-                                showMainApp();
-                            }, 500);
-                        }
-                    })
-                    .catch(e => {
-                        // 如果获取用户信息失败，清除token
-                        localStorage.removeItem('token');
-                        localStorage.removeItem('currentUser');
-                        showMessage('loginMessage', '获取用户信息失败，请重试', 'error');
-                    });
-                } else {
-                    showMessage('loginMessage', '登录失败', 'error');
-                }
-            })
-            .catch(e => showMessage('loginMessage', '错误: ' + e.message, 'error'));
+                        // 检查是否是管理员
+                        fetch('/api/users/me', {
+                            headers: { 'Authorization': 'Bearer ' + token }
+                        })
+                            .then(r => r.json())
+                            .then(user => {
+                                if (user.is_admin) {
+                                    // 管理员跳转到管理端
+                                    showMessage('loginMessage', '👑 管理员登录成功，正在跳转...', 'success');
+                                    setTimeout(() => {
+                                        window.location.href = '/admin';
+                                    }, 500);
+                                } else if (user.is_verifier) {
+                                    // 核查员跳转到核查员页面
+                                    showMessage('loginMessage', '🔍 核查员登录成功，正在跳转...', 'success');
+                                    setTimeout(() => {
+                                        window.location.href = '/verifier';
+                                    }, 500);
+                                } else {
+                                    // 普通用户显示用户端
+                                    showMessage('loginMessage', '👤 登录成功！', 'success');
+                                    setTimeout(() => {
+                                        showMainApp();
+                                    }, 500);
+                                }
+                            })
+                            .catch(e => {
+                                // 如果获取用户信息失败，清除token
+                                localStorage.removeItem('token');
+                                localStorage.removeItem('currentUser');
+                                showMessage('loginMessage', '获取用户信息失败，请重试', 'error');
+                            });
+                    } else {
+                        showMessage('loginMessage', '登录失败', 'error');
+                    }
+                })
+                .catch(e => showMessage('loginMessage', '错误: ' + e.message, 'error'));
         }
-        
+
         function logout() {
             localStorage.removeItem('token');
             localStorage.removeItem('currentUser');
             location.reload();
         }
-        
+
         function showMainApp() {
             document.getElementById('loginPage').style.display = 'none';
             document.getElementById('mainApp').style.display = 'block';
             document.getElementById('currentUser').textContent = currentUser;
             document.getElementById('userInitial').textContent = currentUser.charAt(0).toUpperCase();
         }
-        
+
         function switchTab(tab) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
@@ -459,9 +666,9 @@ GET  /redoc         (ReDoc)</pre>
             const buttons = document.querySelectorAll('.navbar-menu a');
             buttons.forEach(btn => {
                 if (btn.textContent.includes(tab === 'dashboard' ? '仪表板' :
-                                            tab === 'submit' ? '提交新闻' :
-                                            tab === 'analyze' ? '分析结果' :
-                                            tab === 'api' ? 'API接口' : '')) {
+                    tab === 'submit' ? '提交新闻' :
+                        tab === 'analyze' ? '分析结果' :
+                            tab === 'api' ? 'API接口' : '')) {
                     btn.style.borderBottom = '3px solid #667eea';
                     btn.style.color = '#667eea';
                 } else {
@@ -495,24 +702,24 @@ GET  /redoc         (ReDoc)</pre>
                     'Authorization': `Bearer ${token}`
                 }
             })
-            .then(r => r.json())
-            .then(submissions => {
-                if (submissions.length === 0) {
-                    document.getElementById('submissionHistory').innerHTML = '<p style="color: #999; text-align: center;">暂无提交记录</p>';
-                    return;
-                }
+                .then(r => r.json())
+                .then(submissions => {
+                    if (submissions.length === 0) {
+                        document.getElementById('submissionHistory').innerHTML = '<p style="color: #999; text-align: center;">暂无提交记录</p>';
+                        return;
+                    }
 
-                let html = '<div style="display: flex; flex-direction: column; gap: 20px;">';
+                    let html = '<div style="display: flex; flex-direction: column; gap: 20px;">';
 
-                submissions.forEach(sub => {
-                    const statusColor = sub.status.includes('批准') ? '#10b981' :
-                                       sub.status.includes('拒绝') ? '#ef4444' :
-                                       sub.status === '分析完成' ? '#3b82f6' : '#6b7280';
+                    submissions.forEach(sub => {
+                        const statusColor = sub.status.includes('批准') ? '#10b981' :
+                            sub.status.includes('拒绝') ? '#ef4444' :
+                                sub.status === '分析完成' ? '#3b82f6' : '#6b7280';
 
-                    const aiScore = sub.ai_analysis ? sub.ai_analysis.overall_score : 0;
-                    const humanScore = sub.human_verification ? sub.human_verification.credibility_adjustment : null;
+                        const aiScore = sub.ai_analysis ? sub.ai_analysis.overall_score : 0;
+                        const humanScore = sub.human_verification ? sub.human_verification.credibility_adjustment : null;
 
-                    html += `
+                        html += `
                         <div style="background: white; border: 1px solid #e5e7eb; border-radius: 10px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
                             <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
                                 <div style="flex: 1;">
@@ -541,23 +748,23 @@ GET  /redoc         (ReDoc)</pre>
                                 <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px;">
                                     <div style="text-align: center; padding: 10px; background: #eff6ff; border-radius: 8px;">
                                         <div style="font-size: 12px; color: #6b7280; margin-bottom: 5px;">文本</div>
-                                        <div style="font-size: 18px; font-weight: bold; color: #3b82f6;">${sub.ai_analysis.text_score.toFixed(1)}</div>
+                                        <div style="font-size: 18px; font-weight: bold; color: #3b82f6;">${(sub.ai_analysis?.text_score || 0).toFixed(1)}</div>
                                     </div>
                                     <div style="text-align: center; padding: 10px; background: #f0fdf4; border-radius: 8px;">
                                         <div style="font-size: 12px; color: #6b7280; margin-bottom: 5px;">图像</div>
-                                        <div style="font-size: 18px; font-weight: bold; color: #10b981;">${sub.ai_analysis.image_score.toFixed(1)}</div>
+                                        <div style="font-size: 18px; font-weight: bold; color: #10b981;">${(sub.ai_analysis?.image_score || 0).toFixed(1)}</div>
                                     </div>
                                     <div style="text-align: center; padding: 10px; background: #fef3c7; border-radius: 8px;">
                                         <div style="font-size: 12px; color: #6b7280; margin-bottom: 5px;">视频</div>
-                                        <div style="font-size: 18px; font-weight: bold; color: #f59e0b;">${sub.ai_analysis.video_score.toFixed(1)}</div>
+                                        <div style="font-size: 18px; font-weight: bold; color: #f59e0b;">${(sub.ai_analysis?.video_score || 0).toFixed(1)}</div>
                                     </div>
                                     <div style="text-align: center; padding: 10px; background: #fce7f3; border-radius: 8px;">
                                         <div style="font-size: 12px; color: #6b7280; margin-bottom: 5px;">音频</div>
-                                        <div style="font-size: 18px; font-weight: bold; color: #ec4899;">${sub.ai_analysis.audio_score.toFixed(1)}</div>
+                                        <div style="font-size: 18px; font-weight: bold; color: #ec4899;">${(sub.ai_analysis?.audio_score || 0).toFixed(1)}</div>
                                     </div>
                                     <div style="text-align: center; padding: 10px; background: #f3e8ff; border-radius: 8px;">
                                         <div style="font-size: 12px; color: #6b7280; margin-bottom: 5px;">综合评分</div>
-                                        <div style="font-size: 20px; font-weight: bold; color: #8b5cf6;">${sub.ai_analysis.overall_score.toFixed(1)}</div>
+                                        <div style="font-size: 20px; font-weight: bold; color: #8b5cf6;">${(sub.ai_analysis?.overall_score || 0).toFixed(1)}</div>
                                     </div>
                                 </div>
                                 <p style="color: #6b7280; font-size: 12px; margin: 10px 0 0 0;">
@@ -625,14 +832,14 @@ GET  /redoc         (ReDoc)</pre>
                             `}
                         </div>
                     `;
-                });
+                    });
 
-                html += '</div>';
-                document.getElementById('submissionHistory').innerHTML = html;
-            })
-            .catch(e => {
-                document.getElementById('submissionHistory').innerHTML = `<p style="color: #ef4444; text-align: center;">加载失败: ${e.message}</p>`;
-            });
+                    html += '</div>';
+                    document.getElementById('submissionHistory').innerHTML = html;
+                })
+                .catch(e => {
+                    document.getElementById('submissionHistory').innerHTML = `<p style="color: #ef4444; text-align: center;">加载失败: ${e.message}</p>`;
+                });
         }
 
         // 加载个人信息
@@ -648,34 +855,34 @@ GET  /redoc         (ReDoc)</pre>
                     'Authorization': `Bearer ${token}`
                 }
             })
-            .then(r => r.json())
-            .then(user => {
-                // 更新显示信息
-                document.getElementById('profileUsername').textContent = user.username;
-                document.getElementById('profileEmail').textContent = user.email || '未设置';
-                document.getElementById('profileId').textContent = user.id;
-                document.getElementById('profileCreatedAt').textContent = new Date(user.created_at).toLocaleString('zh-CN');
+                .then(r => r.json())
+                .then(user => {
+                    // 更新显示信息
+                    document.getElementById('profileUsername').textContent = user.username;
+                    document.getElementById('profileEmail').textContent = user.email || '未设置';
+                    document.getElementById('profileId').textContent = user.id;
+                    document.getElementById('profileCreatedAt').textContent = new Date(user.created_at).toLocaleString('zh-CN');
 
-                // 更新头像
-                const initial = user.username.charAt(0).toUpperCase();
-                document.getElementById('profileAvatar').textContent = initial;
+                    // 更新头像
+                    const initial = user.username.charAt(0).toUpperCase();
+                    document.getElementById('profileAvatar').textContent = initial;
 
-                // 更新账号类型
-                let accountType = '普通用户';
-                if (user.is_admin) {
-                    accountType = '管理员';
-                } else if (user.is_verifier) {
-                    accountType = '核查员';
-                }
-                document.getElementById('profileType').textContent = accountType;
+                    // 更新账号类型
+                    let accountType = '普通用户';
+                    if (user.is_admin) {
+                        accountType = '管理员';
+                    } else if (user.is_verifier) {
+                        accountType = '核查员';
+                    }
+                    document.getElementById('profileType').textContent = accountType;
 
-                // 设置表单占位符
-                document.getElementById('newUsername').placeholder = `当前: ${user.username}`;
-                document.getElementById('newEmail').placeholder = `当前: ${user.email || '未设置'}`;
-            })
-            .catch(e => {
-                showMessage('profileMessage', '加载失败: ' + e.message, 'error');
-            });
+                    // 设置表单占位符
+                    document.getElementById('newUsername').placeholder = `当前: ${user.username}`;
+                    document.getElementById('newEmail').placeholder = `当前: ${user.email || '未设置'}`;
+                })
+                .catch(e => {
+                    showMessage('profileMessage', '加载失败: ' + e.message, 'error');
+                });
         }
 
         // 更新个人信息
@@ -727,36 +934,36 @@ GET  /redoc         (ReDoc)</pre>
                 },
                 body: formData
             })
-            .then(r => {
-                if (!r.ok) {
-                    return r.json().then(data => {
-                        throw new Error(data.detail || '更新失败');
-                    });
-                }
-                return r.json();
-            })
-            .then(user => {
-                showMessage('profileMessage', '✅ 保存成功！', 'success');
+                .then(r => {
+                    if (!r.ok) {
+                        return r.json().then(data => {
+                            throw new Error(data.detail || '更新失败');
+                        });
+                    }
+                    return r.json();
+                })
+                .then(user => {
+                    showMessage('profileMessage', '✅ 保存成功！', 'success');
 
-                // 如果修改了用户名，需要更新token
-                if (newUsername) {
-                    // 更新导航栏显示
-                    document.getElementById('currentUser').textContent = user.username;
-                    document.getElementById('userInitial').textContent = user.username.charAt(0).toUpperCase();
-                    currentUser = user.username;
-                }
+                    // 如果修改了用户名，需要更新token
+                    if (newUsername) {
+                        // 更新导航栏显示
+                        document.getElementById('currentUser').textContent = user.username;
+                        document.getElementById('userInitial').textContent = user.username.charAt(0).toUpperCase();
+                        currentUser = user.username;
+                    }
 
-                // 清空表单
-                document.getElementById('updateProfileForm').reset();
+                    // 清空表单
+                    document.getElementById('updateProfileForm').reset();
 
-                // 重新加载个人信息
-                setTimeout(() => {
-                    loadProfile();
-                }, 1000);
-            })
-            .catch(e => {
-                showMessage('profileMessage', '❌ ' + e.message, 'error');
-            });
+                    // 重新加载个人信息
+                    setTimeout(() => {
+                        loadProfile();
+                    }, 1000);
+                })
+                .catch(e => {
+                    showMessage('profileMessage', '❌ ' + e.message, 'error');
+                });
         }
 
 
@@ -832,45 +1039,45 @@ GET  /redoc         (ReDoc)</pre>
 
             fetch('/api/submissions', {
                 method: 'POST',
-                headers: {'Authorization': `Bearer ${token}`},
+                headers: { 'Authorization': `Bearer ${token}` },
                 body: formData
             })
-            .then(r => r.json())
-            .then(data => {
-                // 自动分析
-                setTimeout(() => {
-                    analyzeSubmission(data.id);
-                }, 500);
+                .then(r => r.json())
+                .then(data => {
+                    // 自动分析
+                    setTimeout(() => {
+                        analyzeSubmission(data.id);
+                    }, 500);
 
-                loadStats();
-            })
-            .catch(e => showMessage('submitMessage', '错误: ' + e.message, 'error'));
+                    loadStats();
+                })
+                .catch(e => showMessage('submitMessage', '错误: ' + e.message, 'error'));
         }
 
         function analyzeSubmission(submissionId) {
             // 获取提交信息以判断是否为自检模式
             fetch('/api/submissions/' + submissionId)
-            .then(r => r.json())
-            .then(submission => {
-                const isSelfCheck = submission.is_self_check;
+                .then(r => r.json())
+                .then(submission => {
+                    const isSelfCheck = submission.is_self_check;
 
-                // 执行分析
-                return fetch('/api/analysis/' + submissionId, {method: 'POST'})
-                .then(r => {
-                    if (!r.ok) {
-                        return r.json().then(data => {
-                            throw new Error(data.detail || '分析失败');
-                        });
-                    }
-                    return r.json();
-                })
-                .then(data => {
-                    const modeLabel = isSelfCheck ? '🔍 自检结果' : '✅ 分析结果';
-                    const modeTip = isSelfCheck ?
-                        '<div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #ffc107;"><strong>💡 自检模式：</strong>此结果仅供参考，不会进入正式审核流程。建议根据AI分析结果调整内容后再正式发布。</div>' :
-                        '<div style="background: #d4edda; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #28a745;"><strong>✅ 正式提交：</strong>此新闻已进入审核流程，核查员将对AI分析结果进行复核。</div>';
+                    // 执行分析
+                    return fetch('/api/analysis/' + submissionId, { method: 'POST' })
+                        .then(r => {
+                            if (!r.ok) {
+                                return r.json().then(data => {
+                                    throw new Error(data.detail || '分析失败');
+                                });
+                            }
+                            return r.json();
+                        })
+                        .then(data => {
+                            const modeLabel = isSelfCheck ? '🔍 自检结果' : '✅ 分析结果';
+                            const modeTip = isSelfCheck ?
+                                '<div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #ffc107;"><strong>💡 自检模式：</strong>此结果仅供参考，不会进入正式审核流程。建议根据AI分析结果调整内容后再正式发布。</div>' :
+                                '<div style="background: #d4edda; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #28a745;"><strong>✅ 正式提交：</strong>此新闻已进入审核流程，核查员将对AI分析结果进行复核。</div>';
 
-                    const html = `
+                            const html = `
                         <div class="card">
                             <h2>${modeLabel} (ID: ${submissionId})</h2>
                             ${modeTip}
@@ -879,19 +1086,19 @@ GET  /redoc         (ReDoc)</pre>
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
                             <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #667eea;">
                                 <p style="color: #666; margin: 0 0 5px 0;">📝 文本评分</p>
-                                <h3 style="color: #667eea; margin: 0;">${data.text_score.toFixed(2)}</h3>
+                                <h3 style="color: #667eea; margin: 0;">${(data?.text_score || 0).toFixed(2)}</h3>
                             </div>
                             <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #f5576c;">
                                 <p style="color: #666; margin: 0 0 5px 0;">🖼️ 图像评分</p>
-                                <h3 style="color: #f5576c; margin: 0;">${data.image_score.toFixed(2)}</h3>
+                                <h3 style="color: #f5576c; margin: 0;">${(data?.image_score || 0).toFixed(2)}</h3>
                             </div>
                             <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #00f2fe;">
                                 <p style="color: #666; margin: 0 0 5px 0;">🎬 视频评分</p>
-                                <h3 style="color: #00f2fe; margin: 0;">${data.video_score.toFixed(2)}</h3>
+                                <h3 style="color: #00f2fe; margin: 0;">${(data?.video_score || 0).toFixed(2)}</h3>
                             </div>
                             <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #38f9d7;">
                                 <p style="color: #666; margin: 0 0 5px 0;">🔊 音频评分</p>
-                                <h3 style="color: #38f9d7; margin: 0;">${data.audio_score.toFixed(2)}</h3>
+                                <h3 style="color: #38f9d7; margin: 0;">${(data?.audio_score || 0).toFixed(2)}</h3>
                             </div>
                         </div>
 
@@ -899,8 +1106,8 @@ GET  /redoc         (ReDoc)</pre>
                             <p style="color: #666; margin: 0 0 5px 0;">🤖 AI 真实性判断（综合评估）</p>
                             <h3 style="color: ${data.overall_score >= 70 ? '#28a745' : data.overall_score >= 40 ? '#ff9800' : '#dc3545'}; margin: 0;">${data.credibility_label || (data.overall_score >= 70 ? '真实' : data.overall_score >= 40 ? '可疑' : '虚假')}</h3>
                             <p style="color: #666; margin: 5px 0 0 0; font-size: 0.9em;">
-                                综合评分: ${data.overall_score.toFixed(1)}分 |
-                                模型预测: ${data.text_details.credibility || '未知'} (${((data.text_details.credibility_score || 0.5) * 100).toFixed(1)}%)
+                                综合评分: ${(data?.overall_score || 0).toFixed(1)}分 |
+                                模型预测: ${data?.text_details?.credibility || '未知'} (${((data?.text_details?.credibility_score || 0.5) * 100).toFixed(1)}%)
                             </p>
                         </div>
 
@@ -908,29 +1115,29 @@ GET  /redoc         (ReDoc)</pre>
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
                             <div style="background: #f9f9f9; padding: 15px; border-radius: 8px;">
                                 <p style="color: #666; font-weight: bold; margin: 0 0 10px 0;">🖼️ 图像指标</p>
-                                <p style="color: #666; margin: 5px 0;">清晰度: ${data.image_details.clarity.toFixed(1)}%</p>
-                                <p style="color: #666; margin: 5px 0;">分辨率: ${data.image_details.resolution}</p>
-                                <p style="color: #666; margin: 5px 0;">篡改风险: ${data.image_details.tampering_risk.toFixed(1)}%</p>
+                                <p style="color: #666; margin: 5px 0;">清晰度: ${(data?.image_details?.clarity || 0).toFixed(1)}%</p>
+                                <p style="color: #666; margin: 5px 0;">分辨率: ${data?.image_details?.resolution || '未知'}</p>
+                                <p style="color: #666; margin: 5px 0;">篡改风险: ${(data?.image_details?.tampering_risk || 0).toFixed(1)}%</p>
                             </div>
                             <div style="background: #f9f9f9; padding: 15px; border-radius: 8px;">
                                 <p style="color: #666; font-weight: bold; margin: 0 0 10px 0;">🎬 视频指标</p>
-                                <p style="color: #666; margin: 5px 0;">时长: ${data.video_details.duration}秒</p>
-                                <p style="color: #666; margin: 5px 0;">帧率: ${data.video_details.fps}fps</p>
-                                <p style="color: #666; margin: 5px 0;">一致性: ${data.video_details.consistency.toFixed(1)}%</p>
+                                <p style="color: #666; margin: 5px 0;">时长: ${data?.video_details?.duration || 0}秒</p>
+                                <p style="color: #666; margin: 5px 0;">帧率: ${data?.video_details?.fps || 0}fps</p>
+                                <p style="color: #666; margin: 5px 0;">一致性: ${(data?.video_details?.consistency || 0).toFixed(1)}%</p>
                             </div>
                             <div style="background: #f9f9f9; padding: 15px; border-radius: 8px;">
                                 <p style="color: #666; font-weight: bold; margin: 0 0 10px 0;">🔊 音频指标</p>
-                                <p style="color: #666; margin: 5px 0;">采样率: ${data.audio_details.sample_rate}Hz</p>
-                                <p style="color: #666; margin: 5px 0;">噪声水平: ${data.audio_details.noise_level.toFixed(1)}%</p>
-                                <p style="color: #666; margin: 5px 0;">质量: ${data.audio_details.quality.toFixed(1)}%</p>
+                                <p style="color: #666; margin: 5px 0;">采样率: ${(data?.audio_details || {}).sample_rate || 0}Hz</p>
+                                <p style="color: #666; margin: 5px 0;">噪声水平: ${(data?.audio_details?.noise_level || 0).toFixed(1)}%</p>
+                                <p style="color: #666; margin: 5px 0;">质量: ${(data?.audio_details?.quality || 0).toFixed(1)}%</p>
                             </div>
                             <div style="background: #f9f9f9; padding: 15px; border-radius: 8px;">
                                 <p style="color: #666; font-weight: bold; margin: 0 0 10px 0;">📝 文本指标</p>
-                                <p style="color: #666; margin: 5px 0;">字数: ${data.text_details.length || 0}</p>
-                                <p style="color: #666; margin: 5px 0;">词数: ${data.text_details.words || 0}</p>
-                                <p style="color: #666; margin: 5px 0;">情感分: ${((data.text_details.sentiment || 0.5) * 100).toFixed(1)}%</p>
-                                <p style="color: #666; margin: 5px 0;">模型预测: <span style="color: ${data.text_details.credibility === '真实' ? '#28a745' : '#dc3545'}; font-weight: bold;">${data.text_details.credibility || '未知'}</span></p>
-                                <p style="color: #666; margin: 5px 0;">真实概率: ${((data.text_details.credibility_score || 0.5) * 100).toFixed(1)}%</p>
+                                <p style="color: #666; margin: 5px 0;">字数: ${data?.text_details?.length || 0}</p>
+                                <p style="color: #666; margin: 5px 0;">词数: ${data?.text_details?.words || 0}</p>
+                                <p style="color: #666; margin: 5px 0;">情感分: ${(data?.text_details?.sentiment || 0.5 * 100).toFixed(1)}%</p>
+                                <p style="color: #666; margin: 5px 0;">模型预测: <span style="color: ${data?.text_details?.credibility === '真实' ? '#28a745' : '#dc3545'}; font-weight: bold;">${data?.text_details?.credibility || '未知'}</span></p>
+                                <p style="color: #666; margin: 5px 0;">真实概率: ${(data?.text_details?.credibility_score || 0.5 * 100).toFixed(1)}%</p>
                             </div>
                         </div>
 
@@ -940,14 +1147,14 @@ GET  /redoc         (ReDoc)</pre>
                             <p style="color: ${data.text_details.title_consistency.is_consistent ? '#28a745' : '#dc3545'}; font-weight: bold; margin: 5px 0;">
                                 ${data.text_details.title_consistency.is_consistent ? '✅ 标题与正文一致' : '⚠️ 标题与正文不一致'}
                             </p>
-                            <p style="color: #666; margin: 5px 0;">一致性得分: ${(data.text_details.title_consistency.consistency_score * 100).toFixed(1)}%</p>
-                            ${data.text_details.title_consistency.reason ? `<p style="color: #666; margin: 5px 0;">原因: ${data.text_details.title_consistency.reason}</p>` : ''}
+                            <p style="color: #666; margin: 5px 0;">一致性得分: ${((data?.text_details?.title_consistency?.consistency_score || 0) * 100).toFixed(1)}%</p>
+                            ${data?.text_details?.title_consistency?.reason ? `<p style="color: #666; margin: 5px 0;">原因: ${data.text_details.title_consistency.reason}</p>` : ''}
                         </div>
                         ` : ''}
 
-                        <div style="background: #f5f7fa; padding: 20px; border-radius: 8px; margin-top: 20px; border: 2px solid ${data.overall_score >= 70 ? '#28a745' : data.overall_score >= 40 ? '#ffc107' : '#dc3545'}; text-align: center;">
+                        <div style="background: #f5f7fa; padding: 20px; border-radius: 8px; margin-top: 20px; border: 2px solid ${data?.overall_score >= 70 ? '#28a745' : data?.overall_score >= 40 ? '#ffc107' : '#dc3545'}; text-align: center;">
                             <p style="color: #666; margin: 0 0 10px 0;">🎯 综合可信度评分</p>
-                            <h2 style="color: ${data.overall_score >= 70 ? '#28a745' : data.overall_score >= 40 ? '#ffc107' : '#dc3545'}; margin: 0; font-size: 3em;">${data.overall_score.toFixed(2)}</h2>
+                            <h2 style="color: ${data?.overall_score >= 70 ? '#28a745' : data?.overall_score >= 40 ? '#ffc107' : '#dc3545'}; margin: 0; font-size: 3em;">${(data?.overall_score || 0).toFixed(2)}</h2>
                             <p style="font-size: 1.5em; font-weight: bold; color: ${data.overall_score >= 70 ? '#28a745' : data.overall_score >= 40 ? '#ffc107' : '#dc3545'}; margin: 10px 0;">
                                 ${data.credibility_label || (data.overall_score >= 70 ? '真实' : data.overall_score >= 40 ? '可疑' : '虚假')}
                             </p>
@@ -969,15 +1176,15 @@ GET  /redoc         (ReDoc)</pre>
                         </div>
                     </div>
                     `;
-                    document.getElementById('analysisResult').innerHTML = html;
-                    const successMsg = isSelfCheck ? '✅ 自检完成！' : '✅ 分析完成！';
-                    showMessage('submitMessage', successMsg, 'success');
+                            document.getElementById('analysisResult').innerHTML = html;
+                            const successMsg = isSelfCheck ? '✅ 自检完成！' : '✅ 分析完成！';
+                            showMessage('submitMessage', successMsg, 'success');
+                        });
+                })
+                .catch(e => {
+                    console.error('分析错误:', e);
+                    showMessage('submitMessage', '❌ 分析出错: ' + e.message, 'error');
                 });
-            })
-            .catch(e => {
-                console.error('分析错误:', e);
-                showMessage('submitMessage', '❌ 分析出错: ' + e.message, 'error');
-            });
         }
 
         function submitMedia() {
@@ -1008,40 +1215,40 @@ GET  /redoc         (ReDoc)</pre>
 
             fetch('/api/submissions', {
                 method: 'POST',
-                headers: {'Authorization': `Bearer ${token}`},
+                headers: { 'Authorization': `Bearer ${token}` },
                 body: formData
             })
-            .then(r => r.json())
-            .then(data => {
-                // 自动分析
-                setTimeout(() => {
-                    analyzeMedia(data.id, isSelfCheck);
-                }, 500);
+                .then(r => r.json())
+                .then(data => {
+                    // 自动分析
+                    setTimeout(() => {
+                        analyzeMedia(data.id, isSelfCheck);
+                    }, 500);
 
-                loadStats();
-            })
-            .catch(e => showMessage('mediaSubmitMessage', '错误: ' + e.message, 'error'));
+                    loadStats();
+                })
+                .catch(e => showMessage('mediaSubmitMessage', '错误: ' + e.message, 'error'));
         }
 
         function analyzeMedia(submissionId, isSelfCheck = false) {
-            fetch('/api/analysis/' + submissionId, {method: 'POST'})
-            .then(r => {
-                if (!r.ok) {
-                    return r.json().then(data => {
-                        throw new Error(data.detail || '分析失败');
-                    });
-                }
-                return r.json();
-            })
-            .then(data => {
-                const selfCheckBanner = isSelfCheck ? `
+            fetch('/api/analysis/' + submissionId, { method: 'POST' })
+                .then(r => {
+                    if (!r.ok) {
+                        return r.json().then(data => {
+                            throw new Error(data.detail || '分析失败');
+                        });
+                    }
+                    return r.json();
+                })
+                .then(data => {
+                    const selfCheckBanner = isSelfCheck ? `
                     <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 15px; border-radius: 8px; margin-bottom: 20px; color: white; text-align: center;">
                         <h3 style="margin: 0 0 5px 0;">💡 自检模式</h3>
                         <p style="margin: 0; font-size: 0.95em;">此为预检结果，仅供内部参考，不会进入正式审核流程</p>
                     </div>
                 ` : '';
 
-                const html = `
+                    const html = `
                     <div class="card">
                         ${selfCheckBanner}
                         <h2>✅ 多媒体分析结果 (ID: ${submissionId})</h2>
@@ -1050,19 +1257,19 @@ GET  /redoc         (ReDoc)</pre>
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
                             <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #00f2fe;">
                                 <p style="color: #666; margin: 0 0 5px 0;">🎬 视频评分</p>
-                                <h3 style="color: #00f2fe; margin: 0;">${data.video_score.toFixed(2)}</h3>
+                                <h3 style="color: #00f2fe; margin: 0;">${(data?.video_score || 0).toFixed(2)}</h3>
                             </div>
                             <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #38f9d7;">
                                 <p style="color: #666; margin: 0 0 5px 0;">🔊 音频评分</p>
-                                <h3 style="color: #38f9d7; margin: 0;">${data.audio_score.toFixed(2)}</h3>
+                                <h3 style="color: #38f9d7; margin: 0;">${(data?.audio_score || 0).toFixed(2)}</h3>
                             </div>
                             <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #667eea;">
                                 <p style="color: #666; margin: 0 0 5px 0;">📝 文本评分</p>
-                                <h3 style="color: #667eea; margin: 0;">${data.text_score.toFixed(2)}</h3>
+                                <h3 style="color: #667eea; margin: 0;">${(data?.text_score || 0).toFixed(2)}</h3>
                             </div>
                             <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #f5576c;">
                                 <p style="color: #666; margin: 0 0 5px 0;">🖼️ 图像评分</p>
-                                <h3 style="color: #f5576c; margin: 0;">${data.image_score.toFixed(2)}</h3>
+                                <h3 style="color: #f5576c; margin: 0;">${(data?.image_score || 0).toFixed(2)}</h3>
                             </div>
                         </div>
 
@@ -1070,35 +1277,35 @@ GET  /redoc         (ReDoc)</pre>
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
                             <div style="background: #f9f9f9; padding: 15px; border-radius: 8px;">
                                 <p style="color: #666; font-weight: bold; margin: 0 0 10px 0;">🎬 视频指标</p>
-                                <p style="color: #666; margin: 5px 0;">时长: ${data.video_details.duration}秒</p>
-                                <p style="color: #666; margin: 5px 0;">帧率: ${data.video_details.fps}fps</p>
-                                <p style="color: #666; margin: 5px 0;">关键帧: ${data.video_details.keyframes}个</p>
-                                <p style="color: #666; margin: 5px 0;">一致性: ${data.video_details.consistency.toFixed(1)}%</p>
+                                <p style="color: #666; margin: 5px 0;">时长: ${data?.video_details?.duration || 0}秒</p>
+                                <p style="color: #666; margin: 5px 0;">帧率: ${data?.video_details?.fps || 0}fps</p>
+                                <p style="color: #666; margin: 5px 0;">关键帧: ${data?.video_details?.keyframes || 0}个</p>
+                                <p style="color: #666; margin: 5px 0;">一致性: ${(data?.video_details?.consistency || 0).toFixed(1)}%</p>
                             </div>
                             <div style="background: #f9f9f9; padding: 15px; border-radius: 8px;">
                                 <p style="color: #666; font-weight: bold; margin: 0 0 10px 0;">🔊 音频指标</p>
-                                <p style="color: #666; margin: 5px 0;">时长: ${data.audio_details.duration}秒</p>
-                                <p style="color: #666; margin: 5px 0;">采样率: ${data.audio_details.sample_rate}Hz</p>
-                                <p style="color: #666; margin: 5px 0;">噪声水平: ${data.audio_details.noise_level.toFixed(1)}%</p>
-                                <p style="color: #666; margin: 5px 0;">质量: ${data.audio_details.quality.toFixed(1)}%</p>
+                                <p style="color: #666; margin: 5px 0;">时长: ${(data?.audio_details || {}).duration || 0}秒</p>
+                                <p style="color: #666; margin: 5px 0;">采样率: ${(data?.audio_details || {}).sample_rate || 0}Hz</p>
+                                <p style="color: #666; margin: 5px 0;">噪声水平: ${(data?.audio_details?.noise_level || 0).toFixed(1)}%</p>
+                                <p style="color: #666; margin: 5px 0;">质量: ${(data?.audio_details?.quality || 0).toFixed(1)}%</p>
                             </div>
                             <div style="background: #f9f9f9; padding: 15px; border-radius: 8px;">
                                 <p style="color: #666; font-weight: bold; margin: 0 0 10px 0;">🖼️ 图像指标</p>
-                                <p style="color: #666; margin: 5px 0;">清晰度: ${data.image_details.clarity.toFixed(1)}%</p>
-                                <p style="color: #666; margin: 5px 0;">分辨率: ${data.image_details.resolution}</p>
-                                <p style="color: #666; margin: 5px 0;">篡改风险: ${data.image_details.tampering_risk.toFixed(1)}%</p>
+                                <p style="color: #666; margin: 5px 0;">清晰度: ${(data?.image_details?.clarity || 0).toFixed(1)}%</p>
+                                <p style="color: #666; margin: 5px 0;">分辨率: ${data?.image_details?.resolution || '未知'}</p>
+                                <p style="color: #666; margin: 5px 0;">篡改风险: ${(data?.image_details?.tampering_risk || 0).toFixed(1)}%</p>
                             </div>
                             <div style="background: #f9f9f9; padding: 15px; border-radius: 8px;">
                                 <p style="color: #666; font-weight: bold; margin: 0 0 10px 0;">📝 文本指标</p>
-                                <p style="color: #666; margin: 5px 0;">字数: ${data.text_details.length || 0}</p>
-                                <p style="color: #666; margin: 5px 0;">词数: ${data.text_details.words || 0}</p>
-                                <p style="color: #666; margin: 5px 0;">情感分: ${((data.text_details.sentiment || 0.5) * 100).toFixed(1)}%</p>
+                                <p style="color: #666; margin: 5px 0;">字数: ${data?.text_details?.length || 0}</p>
+                                <p style="color: #666; margin: 5px 0;">词数: ${data?.text_details?.words || 0}</p>
+                                <p style="color: #666; margin: 5px 0;">情感分: ${(data?.text_details?.sentiment || 0.5 * 100).toFixed(1)}%</p>
                             </div>
                         </div>
 
-                        <div style="background: #f5f7fa; padding: 20px; border-radius: 8px; margin-top: 20px; border: 2px solid ${data.overall_score >= 70 ? '#28a745' : data.overall_score >= 40 ? '#ffc107' : '#dc3545'}; text-align: center;">
+                        <div style="background: #f5f7fa; padding: 20px; border-radius: 8px; margin-top: 20px; border: 2px solid ${data?.overall_score >= 70 ? '#28a745' : data?.overall_score >= 40 ? '#ffc107' : '#dc3545'}; text-align: center;">
                             <p style="color: #666; margin: 0 0 10px 0;">🎯 综合可信度评分</p>
-                            <h2 style="color: ${data.overall_score >= 70 ? '#28a745' : data.overall_score >= 40 ? '#ffc107' : '#dc3545'}; margin: 0; font-size: 3em;">${data.overall_score.toFixed(2)}</h2>
+                            <h2 style="color: ${data?.overall_score >= 70 ? '#28a745' : data?.overall_score >= 40 ? '#ffc107' : '#dc3545'}; margin: 0; font-size: 3em;">${(data?.overall_score || 0).toFixed(2)}</h2>
                             <p style="font-size: 1.5em; font-weight: bold; color: ${data.overall_score >= 70 ? '#28a745' : data.overall_score >= 40 ? '#ffc107' : '#dc3545'}; margin: 10px 0;">
                                 ${data.credibility_label || (data.overall_score >= 70 ? '真实' : data.overall_score >= 40 ? '可疑' : '虚假')}
                             </p>
@@ -1119,14 +1326,14 @@ GET  /redoc         (ReDoc)</pre>
                         </div>
                     </div>
                 `;
-                document.getElementById('mediaAnalysisResult').innerHTML = html;
-                const successMsg = isSelfCheck ? '✅ 自检完成！' : '✅ 分析完成！';
-                showMessage('mediaSubmitMessage', successMsg, 'success');
-            })
-            .catch(e => {
-                console.error('分析错误:', e);
-                showMessage('mediaSubmitMessage', '❌ 分析出错: ' + e.message, 'error');
-            });
+                    document.getElementById('mediaAnalysisResult').innerHTML = html;
+                    const successMsg = isSelfCheck ? '✅ 自检完成！' : '✅ 分析完成！';
+                    showMessage('mediaSubmitMessage', successMsg, 'success');
+                })
+                .catch(e => {
+                    console.error('分析错误:', e);
+                    showMessage('mediaSubmitMessage', '❌ 分析出错: ' + e.message, 'error');
+                });
         }
 
         function exportPDF(submissionId, title) {
@@ -1134,50 +1341,50 @@ GET  /redoc         (ReDoc)</pre>
             showMessage(messageId, '⏳ 正在生成PDF...', 'success');
 
             fetch(`/api/reports/${submissionId}?format=pdf`, {
-                headers: {'Authorization': `Bearer ${token}`}
+                headers: { 'Authorization': `Bearer ${token}` }
             })
-            .then(r => r.blob())
-            .then(blob => {
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `${title}_${submissionId}.pdf`;
-                document.body.appendChild(a);
-                a.click();
-                window.URL.revokeObjectURL(url);
-                document.body.removeChild(a);
-                showMessage('videoSubmitMessage', '✅ PDF已下载！', 'success');
-            })
-            .catch(e => {
-                console.error('PDF导出错误:', e);
-                showMessage('videoSubmitMessage', 'PDF导出失败: ' + e.message, 'error');
-            });
+                .then(r => r.blob())
+                .then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `${title}_${submissionId}.pdf`;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                    showMessage('videoSubmitMessage', '✅ PDF已下载！', 'success');
+                })
+                .catch(e => {
+                    console.error('PDF导出错误:', e);
+                    showMessage('videoSubmitMessage', 'PDF导出失败: ' + e.message, 'error');
+                });
         }
 
         function exportJSON(submissionId) {
             showMessage('videoSubmitMessage', '⏳ 正在导出JSON...', 'success');
 
             fetch(`/api/reports/${submissionId}?format=json`, {
-                headers: {'Authorization': `Bearer ${token}`}
+                headers: { 'Authorization': `Bearer ${token}` }
             })
-            .then(r => r.json())
-            .then(data => {
-                const dataStr = JSON.stringify(data, null, 2);
-                const dataBlob = new Blob([dataStr], {type: 'application/json'});
-                const url = window.URL.createObjectURL(dataBlob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `分析报告_${submissionId}.json`;
-                document.body.appendChild(a);
-                a.click();
-                window.URL.revokeObjectURL(url);
-                document.body.removeChild(a);
-                showMessage('videoSubmitMessage', '✅ JSON已下载！', 'success');
-            })
-            .catch(e => {
-                console.error('JSON导出错误:', e);
-                showMessage('videoSubmitMessage', 'JSON导出失败: ' + e.message, 'error');
-            });
+                .then(r => r.json())
+                .then(data => {
+                    const dataStr = JSON.stringify(data, null, 2);
+                    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+                    const url = window.URL.createObjectURL(dataBlob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `分析报告_${submissionId}.json`;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                    showMessage('videoSubmitMessage', '✅ JSON已下载！', 'success');
+                })
+                .catch(e => {
+                    console.error('JSON导出错误:', e);
+                    showMessage('videoSubmitMessage', 'JSON导出失败: ' + e.message, 'error');
+                });
         }
 
 
@@ -1196,5 +1403,5 @@ GET  /redoc         (ReDoc)</pre>
 
     </script>
 </body>
-</html>
 
+</html>

@@ -912,7 +912,7 @@
                     <p><strong>文本评分：</strong>${analysis.text_score ? analysis.text_score.toFixed(2) : '无'}</p>
                     <p><strong>图像评分：</strong>${analysis.image_score ? analysis.image_score.toFixed(2) : '无'}</p>
                     <p><strong>视频评分：</strong>${analysis.video_score ? analysis.video_score.toFixed(2) : '无'}</p>
-                    <p><strong>音频评分：</strong>${analysis.audio_score ? analysis.audio_score.toFixed(2) : '无'}</p>
+                    <p><strong>音频评分：</strong>${(analysis.audio_score || 0) ? (analysis.audio_score || 0).toFixed(2) : '无'}</p>
                     <p><strong>综合可信度：</strong><span style="font-size: 1.2em; font-weight: bold; color: ${scoreColor};">${overallScore.toFixed(2)} 分 - ${credibilityLabel}</span></p>
                     ${credibilityDesc ? `<p><strong>判定说明：</strong>${credibilityDesc}</p>` : ''}
                     ${analysis.modalities_used ? `<p><strong>使用模态：</strong>${analysis.modalities_used.join(', ')}</p>` : ''}
@@ -963,8 +963,8 @@
                 `;
             }
 
-            if (analysis.audio_details) {
-                const details = typeof analysis.audio_details === 'string' ? JSON.parse(analysis.audio_details) : analysis.audio_details;
+            if ((analysis.audio_details || {})) {
+                const details = typeof (analysis.audio_details || {}) === 'string' ? JSON.parse((analysis.audio_details || {})) : (analysis.audio_details || {});
                 html += `
                     <div style="background: #f8d7da; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
                         <h3 style="margin-top: 0; color: #721c24;">🎵 音频分析详情</h3>
@@ -1131,7 +1131,7 @@
                             </div>
                             <div style="text-align: center; padding: 15px; background: #f8f9fa; border-radius: 8px;">
                                 <div style="font-size: 12px; color: #666; margin-bottom: 5px;">音频评分</div>
-                                <div style="font-size: 24px; font-weight: bold; color: #ffc107;">${analysis.audio_score ? analysis.audio_score.toFixed(1) : 'N/A'}</div>
+                                <div style="font-size: 24px; font-weight: bold; color: #ffc107;">${(analysis.audio_score || 0) ? (analysis.audio_score || 0).toFixed(1) : 'N/A'}</div>
                             </div>
                         </div>
                         <div style="text-align: center; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 8px; color: white;">
@@ -1185,8 +1185,8 @@
                 `;
             }
 
-            if (analysis.audio_details) {
-                const details = typeof analysis.audio_details === 'string' ? JSON.parse(analysis.audio_details) : analysis.audio_details;
+            if ((analysis.audio_details || {})) {
+                const details = typeof (analysis.audio_details || {}) === 'string' ? JSON.parse((analysis.audio_details || {})) : (analysis.audio_details || {});
                 html += `
                     <div style="margin-top: 15px; padding: 15px; background: #f8d7da; border-radius: 8px; border-left: 4px solid #721c24;">
                         <h4 style="margin: 0 0 10px 0; color: #721c24;">🎵 音频分析详情</h4>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,7 +27,7 @@
             margin: 0 auto;
             background: white;
             border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
             overflow: hidden;
         }
 
@@ -49,7 +50,7 @@
         }
 
         .user-info {
-            background: rgba(255,255,255,0.15);
+            background: rgba(255, 255, 255, 0.15);
             padding: 10px 20px;
             border-radius: 20px;
             display: inline-block;
@@ -130,7 +131,7 @@
             padding: 22px;
             transition: all 0.3s ease;
             cursor: pointer;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         }
 
         .submission-card:hover {
@@ -216,7 +217,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0, 0, 0, 0.5);
             z-index: 1000;
             overflow-y: auto;
         }
@@ -230,7 +231,7 @@
             padding: 35px;
             max-height: 90vh;
             overflow-y: auto;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
         }
 
         /* 美化滚动条 */
@@ -388,7 +389,7 @@
             position: absolute;
             top: 20px;
             right: 20px;
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
             color: white;
             border: 2px solid white;
             padding: 10px 20px;
@@ -404,6 +405,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="header">
@@ -502,19 +504,19 @@
                 'Authorization': 'Bearer ' + token
             }
         })
-        .then(res => res.json())
-        .then(user => {
-            if (!user.is_verifier) {
-                alert('您没有核查员权限！');
+            .then(res => res.json())
+            .then(user => {
+                if (!user.is_verifier) {
+                    alert('您没有核查员权限！');
+                    window.location.href = '/';
+                }
+                document.getElementById('username').textContent = user.username;
+            })
+            .catch(err => {
+                console.error('验证失败:', err);
+                alert('验证失败，请重新登录');
                 window.location.href = '/';
-            }
-            document.getElementById('username').textContent = user.username;
-        })
-        .catch(err => {
-            console.error('验证失败:', err);
-            alert('验证失败，请重新登录');
-            window.location.href = '/';
-        });
+            });
 
         // 切换标签页
         function switchTab(tabName) {
@@ -547,23 +549,23 @@
                     'Authorization': 'Bearer ' + token
                 }
             })
-            .then(res => res.json())
-            .then(data => {
-                const list = document.getElementById('pending-list');
-                if (data.length === 0) {
-                    list.innerHTML = '<p style="text-align: center; color: #999;">暂无待审核内容</p>';
-                    return;
-                }
+                .then(res => res.json())
+                .then(data => {
+                    const list = document.getElementById('pending-list');
+                    if (data.length === 0) {
+                        list.innerHTML = '<p style="text-align: center; color: #999;">暂无待审核内容</p>';
+                        return;
+                    }
 
-                list.innerHTML = data.map(item => {
-                    const scoreClass = item.analysis_score >= 70 ? 'score-high' :
-                                      item.analysis_score >= 40 ? 'score-medium' : 'score-low';
-                    const statusClass = item.verification_status === 'approved' ? 'status-approved' :
-                                       item.verification_status === 'rejected' ? 'status-rejected' : 'status-pending';
-                    const statusText = getStatusText(item.verification_status);
-                    const labelText = item.analysis_score >= 70 ? '真实' : item.analysis_score >= 40 ? '可疑' : '虚假';
+                    list.innerHTML = data.map(item => {
+                        const scoreClass = item.analysis_score >= 70 ? 'score-high' :
+                            item.analysis_score >= 40 ? 'score-medium' : 'score-low';
+                        const statusClass = item.verification_status === 'approved' ? 'status-approved' :
+                            item.verification_status === 'rejected' ? 'status-rejected' : 'status-pending';
+                        const statusText = getStatusText(item.verification_status);
+                        const labelText = item.analysis_score >= 70 ? '真实' : item.analysis_score >= 40 ? '可疑' : '虚假';
 
-                    return `
+                        return `
                         <div class="submission-card" onclick="openVerificationModal(${item.id})">
                             <div class="submission-header">
                                 <div class="submission-title">${item.title}</div>
@@ -572,17 +574,17 @@
                             <div class="submission-content">${item.content}</div>
                             <div class="submission-meta">
                                 <span>提交时间: ${item.created_at.split('T')[0]}</span>
-                                <span class="score-badge ${scoreClass}">AI评分: ${item.analysis_score.toFixed(2)} (${labelText})</span>
+                                <span class="score-badge ${scoreClass}">AI评分: ${(item.analysis_score || 0).toFixed(2)} (${labelText})</span>
                             </div>
                         </div>
                     `;
-                }).join('');
-            })
-            .catch(err => {
-                console.error('加载失败:', err);
-                document.getElementById('pending-list').innerHTML =
-                    '<p style="text-align: center; color: #dc3545;">加载失败，请刷新重试</p>';
-            });
+                    }).join('');
+                })
+                .catch(err => {
+                    console.error('加载失败:', err);
+                    document.getElementById('pending-list').innerHTML =
+                        '<p style="text-align: center; color: #dc3545;">加载失败，请刷新重试</p>';
+                });
         }
 
         // 加载统计数据
@@ -592,16 +594,16 @@
                     'Authorization': 'Bearer ' + token
                 }
             })
-            .then(res => res.json())
-            .then(data => {
-                document.getElementById('total-verifications').textContent = data.total_verifications;
-                document.getElementById('approved-count').textContent = data.approved_count;
-                document.getElementById('rejected-count').textContent = data.rejected_count;
-                document.getElementById('pending-count').textContent = data.pending_count;
-            })
-            .catch(err => {
-                console.error('加载统计数据失败:', err);
-            });
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('total-verifications').textContent = data.total_verifications;
+                    document.getElementById('approved-count').textContent = data.approved_count;
+                    document.getElementById('rejected-count').textContent = data.rejected_count;
+                    document.getElementById('pending-count').textContent = data.pending_count;
+                })
+                .catch(err => {
+                    console.error('加载统计数据失败:', err);
+                });
         }
 
         // 加载审核历史
@@ -611,20 +613,20 @@
                     'Authorization': 'Bearer ' + token
                 }
             })
-            .then(res => res.json())
-            .then(data => {
-                const list = document.getElementById('history-list');
-                if (data.length === 0) {
-                    list.innerHTML = '<p style="text-align: center; color: #999;">暂无审核历史</p>';
-                    return;
-                }
+                .then(res => res.json())
+                .then(data => {
+                    const list = document.getElementById('history-list');
+                    if (data.length === 0) {
+                        list.innerHTML = '<p style="text-align: center; color: #999;">暂无审核历史</p>';
+                        return;
+                    }
 
-                list.innerHTML = data.map(item => {
-                    const statusClass = item.verification_status === 'approved' ? 'status-approved' :
-                                       item.verification_status === 'rejected' ? 'status-rejected' : 'status-pending';
-                    const statusText = getStatusText(item.verification_status);
+                    list.innerHTML = data.map(item => {
+                        const statusClass = item.verification_status === 'approved' ? 'status-approved' :
+                            item.verification_status === 'rejected' ? 'status-rejected' : 'status-pending';
+                        const statusText = getStatusText(item.verification_status);
 
-                    return `
+                        return `
                         <div class="submission-card" onclick="viewHistoryDetail(${item.submission_id})" style="cursor: pointer; transition: all 0.3s;">
                             <div class="submission-header">
                                 <div class="submission-title">${item.submission_title}</div>
@@ -634,17 +636,17 @@
                             <div class="submission-meta">
                                 <span>审核时间: ${item.created_at.split('T')[0]}</span>
                                 ${item.credibility_adjustment ?
-                                    `<span>调整评分: ${item.credibility_adjustment.toFixed(2)}</span>` : ''}
+                                `<span>调整评分: ${item.credibility_adjustment.toFixed(2)}</span>` : ''}
                             </div>
                         </div>
                     `;
-                }).join('');
-            })
-            .catch(err => {
-                console.error('加载历史失败:', err);
-                document.getElementById('history-list').innerHTML =
-                    '<p style="text-align: center; color: #dc3545;">加载失败，请刷新重试</p>';
-            });
+                    }).join('');
+                })
+                .catch(err => {
+                    console.error('加载历史失败:', err);
+                    document.getElementById('history-list').innerHTML =
+                        '<p style="text-align: center; color: #dc3545;">加载失败，请刷新重试</p>';
+                });
         }
 
         // 查看历史详情（只读模式）
@@ -654,17 +656,17 @@
                     'Authorization': 'Bearer ' + token
                 }
             })
-            .then(res => res.json())
-            .then(data => {
-                const submission = data.submission;
-                const analysis = data.analysis;
-                const verifications = data.verifications;
+                .then(res => res.json())
+                .then(data => {
+                    const submission = data.submission;
+                    const analysis = data.analysis;
+                    const verifications = data.verifications;
 
-                // 修改模态框标题
-                document.querySelector('#verification-modal .modal-header h2').textContent = '审核详情（历史记录）';
+                    // 修改模态框标题
+                    document.querySelector('#verification-modal .modal-header h2').textContent = '审核详情（历史记录）';
 
-                const modalBody = document.getElementById('modal-body');
-                modalBody.innerHTML = `
+                    const modalBody = document.getElementById('modal-body');
+                    modalBody.innerHTML = `
                     <!-- 顶部横幅 -->
                     <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; border-radius: 12px; margin-bottom: 25px; color: white; text-align: center; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);">
                         <h3 style="margin: 0 0 8px 0; font-size: 1.5em;">📜 历史审核记录</h3>
@@ -725,14 +727,14 @@
                             </div>
                             <div style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); padding: 20px; border-radius: 10px; text-align: center; box-shadow: 0 4px 10px rgba(56, 249, 215, 0.3);">
                                 <div style="color: rgba(255,255,255,0.9); font-size: 0.95em; margin-bottom: 8px; font-weight: 500;">🔊 音频评分</div>
-                                <div style="color: white; font-size: 2.2em; font-weight: bold;">${analysis.audio_score.toFixed(2)}</div>
+                                <div style="color: white; font-size: 2.2em; font-weight: bold;">${(analysis.audio_score || 0).toFixed(2)}</div>
                             </div>
                         </div>
 
                         <!-- 综合评分 -->
                         <div style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); padding: 25px; border-radius: 12px; text-align: center; box-shadow: 0 6px 20px rgba(250, 112, 154, 0.4);">
                             <div style="color: rgba(0,0,0,0.7); font-size: 1.1em; margin-bottom: 10px; font-weight: 600;">🎯 综合可信度评分</div>
-                            <div style="color: #fff; font-size: 3em; font-weight: bold; text-shadow: 2px 2px 4px rgba(0,0,0,0.2);">${analysis.overall_score.toFixed(2)}</div>
+                            <div style="color: #fff; font-size: 3em; font-weight: bold; text-shadow: 2px 2px 4px rgba(0,0,0,0.2);">${(analysis?.overall_score || 0).toFixed(2)}</div>
                         </div>
 
                         <!-- AI分析详情 -->
@@ -754,15 +756,15 @@
                         </h3>
 
                         ${verifications.map(v => {
-                            const statusClass = v.verification_status === 'approved' ? '#28a745' :
-                                               v.verification_status === 'rejected' ? '#dc3545' : '#ffc107';
-                            const statusBg = v.verification_status === 'approved' ? 'linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%)' :
-                                            v.verification_status === 'rejected' ? 'linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%)' :
-                                            'linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%)';
-                            const statusIcon = v.verification_status === 'approved' ? '✅' :
-                                              v.verification_status === 'rejected' ? '❌' : '⚠️';
+                        const statusClass = v.verification_status === 'approved' ? '#28a745' :
+                            v.verification_status === 'rejected' ? '#dc3545' : '#ffc107';
+                        const statusBg = v.verification_status === 'approved' ? 'linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%)' :
+                            v.verification_status === 'rejected' ? 'linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%)' :
+                                'linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%)';
+                        const statusIcon = v.verification_status === 'approved' ? '✅' :
+                            v.verification_status === 'rejected' ? '❌' : '⚠️';
 
-                            return `
+                        return `
                             <div style="margin-bottom: 20px; padding: 20px; background: white; border-radius: 10px; border-left: 5px solid ${statusClass}; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                                 <!-- 审核状态头部 -->
                                 <div style="background: ${statusBg}; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
@@ -810,7 +812,7 @@
                                             <strong>问题类型：</strong>
                                             <span style="background: #fff; padding: 4px 12px; border-radius: 4px; margin-left: 5px;">
                                                 ${v.issue_type === 'false_positive' ? '🔴 错检（误报）' :
-                                                  v.issue_type === 'false_negative' ? '🟡 漏检（漏报）' : '🟢 正常'}
+                                    v.issue_type === 'false_negative' ? '🟡 漏检（漏报）' : '🟢 正常'}
                                             </span>
                                         </div>
                                         ${v.issue_description ? `
@@ -836,7 +838,7 @@
                                 ` : ''}
                             </div>
                             `;
-                        }).join('')}
+                    }).join('')}
                     </div>
                     ` : '<div style="background: #f8f9fa; padding: 30px; border-radius: 12px; text-align: center; color: #999; margin-bottom: 25px;"><p style="margin: 0; font-size: 1.1em;">暂无审核记录</p></div>'}
 
@@ -848,12 +850,12 @@
                     </div>
                 `;
 
-                document.getElementById('verification-modal').style.display = 'flex';
-            })
-            .catch(err => {
-                console.error('加载详情失败:', err);
-                alert('加载详情失败，请重试');
-            });
+                    document.getElementById('verification-modal').style.display = 'flex';
+                })
+                .catch(err => {
+                    console.error('加载详情失败:', err);
+                    alert('加载详情失败，请重试');
+                });
         }
 
         // 打开审核模态框
@@ -868,14 +870,14 @@
                     'Authorization': 'Bearer ' + token
                 }
             })
-            .then(res => res.json())
-            .then(data => {
-                const submission = data.submission;
-                const analysis = data.analysis;
-                const verifications = data.verifications;
+                .then(res => res.json())
+                .then(data => {
+                    const submission = data.submission;
+                    const analysis = data.analysis;
+                    const verifications = data.verifications;
 
-                const modalBody = document.getElementById('modal-body');
-                modalBody.innerHTML = `
+                    const modalBody = document.getElementById('modal-body');
+                    modalBody.innerHTML = `
                     <div class="form-group">
                         <label>新闻标题</label>
                         <input type="text" value="${submission.title}" readonly>
@@ -892,23 +894,23 @@
                         <div class="analysis-grid">
                             <div class="analysis-item">
                                 <h4>文本评分</h4>
-                                <p>${analysis.text_score.toFixed(2)}</p>
+                                <p>${(analysis?.text_score || 0).toFixed(2)}</p>
                             </div>
                             <div class="analysis-item">
                                 <h4>图像评分</h4>
-                                <p>${analysis.image_score.toFixed(2)}</p>
+                                <p>${(analysis?.image_score || 0).toFixed(2)}</p>
                             </div>
                             <div class="analysis-item">
                                 <h4>视频评分</h4>
-                                <p>${analysis.video_score.toFixed(2)}</p>
+                                <p>${(analysis?.video_score || 0).toFixed(2)}</p>
                             </div>
                             <div class="analysis-item">
                                 <h4>音频评分</h4>
-                                <p>${analysis.audio_score.toFixed(2)}</p>
+                                <p>${(analysis.audio_score || 0).toFixed(2)}</p>
                             </div>
                             <div class="analysis-item">
                                 <h4>综合评分</h4>
-                                <p style="color: #667eea; font-size: 2em;">${analysis.overall_score.toFixed(2)}</p>
+                                <p style="color: #667eea; font-size: 2em;">${(analysis?.overall_score || 0).toFixed(2)}</p>
                             </div>
                         </div>
                     </div>
@@ -1007,12 +1009,12 @@
                     </div>
                 `;
 
-                document.getElementById('verification-modal').style.display = 'block';
-            })
-            .catch(err => {
-                console.error('加载详情失败:', err);
-                alert('加载失败，请重试');
-            });
+                    document.getElementById('verification-modal').style.display = 'block';
+                })
+                .catch(err => {
+                    console.error('加载详情失败:', err);
+                    alert('加载失败，请重试');
+                });
         }
 
         // 新增：切换问题标注字段显示
@@ -1081,19 +1083,19 @@
                 },
                 body: JSON.stringify(data)
             })
-            .then(res => res.json())
-            .then(result => {
-                const successMsg = hasIssue ?
-                    '✅ 审核提交成功！问题标注已记录，将用于改进AI模型。' :
-                    '✅ 审核提交成功！';
-                alert(successMsg);
-                closeModal();
-                loadPendingSubmissions();
-            })
-            .catch(err => {
-                console.error('提交失败:', err);
-                alert('提交失败，请重试');
-            });
+                .then(res => res.json())
+                .then(result => {
+                    const successMsg = hasIssue ?
+                        '✅ 审核提交成功！问题标注已记录，将用于改进AI模型。' :
+                        '✅ 审核提交成功！';
+                    alert(successMsg);
+                    closeModal();
+                    loadPendingSubmissions();
+                })
+                .catch(err => {
+                    console.error('提交失败:', err);
+                    alert('提交失败，请重试');
+                });
         }
 
         // 退出登录
@@ -1107,5 +1109,5 @@
         loadStats();
     </script>
 </body>
-</html>
 
+</html>

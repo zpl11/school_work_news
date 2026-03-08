@@ -22,7 +22,7 @@ from database import get_db, init_db
 from models import User, NewsSubmission, AnalysisResult, VerificationRecord
 from schemas import UserRegister, UserLogin, Token, NewsSubmissionCreate, NewsSubmissionResponse, VerificationCreate, VerificationResponse
 from auth import hash_password, verify_password, create_access_token, decode_token
-from analysis_engine import text_analyzer, image_analyzer, video_analyzer, audio_analyzer, EvidenceFusion
+from analysis_engine import text_analyzer, image_analyzer, video_analyzer, EvidenceFusion
 
 # 配置日志
 logging.basicConfig(level=settings.LOG_LEVEL)
@@ -392,7 +392,6 @@ def get_analysis_result(submission_id: int, db: Session = Depends(get_db)):
         "text_score": analysis.text_score,
         "image_score": analysis.image_score,
         "video_score": analysis.video_score,
-        "audio_score": analysis.audio_score,
         "credibility_score": analysis.overall_score,
         "created_at": analysis.created_at.isoformat() if analysis.created_at else None
     }
@@ -415,12 +414,6 @@ def get_analysis_result(submission_id: int, db: Session = Depends(get_db)):
             result["video_details"] = json.loads(analysis.video_details) if isinstance(analysis.video_details, str) else analysis.video_details
         except:
             result["video_details"] = analysis.video_details
-
-    if analysis.audio_details:
-        try:
-            result["audio_details"] = json.loads(analysis.audio_details) if isinstance(analysis.audio_details, str) else analysis.audio_details
-        except:
-            result["audio_details"] = analysis.audio_details
 
     return result
 
@@ -491,7 +484,6 @@ def get_user_submissions(
                 "text_score": analysis.text_score if analysis else 0,
                 "image_score": analysis.image_score if analysis else 0,
                 "video_score": analysis.video_score if analysis else 0,
-                "audio_score": analysis.audio_score if analysis else 0,
                 "overall_score": analysis.overall_score if analysis else 0,
                 "analyzed_at": analysis.created_at.isoformat() if analysis and analysis.created_at else ""
             } if analysis else None,
@@ -528,16 +520,14 @@ def analyze_submission(submission_id: int, db: Session = Depends(get_db)):
         text_score = 0
         image_score = 0
         video_score = 0
-        audio_score = 0
         text_result = {}
         image_result = {}
         video_result = {}
-        audio_result = {}
         title_consistency_score = None
         image_text_consistency_score = None
 
         # 1. 真实文本分析（含标题-正文一致性检测）
-        if submission.content:
+        if submission.content and len(submission.content.strip()) >= 5:
             try:
                 # 传入标题进行一致性检测
                 text_result = text_analyzer.analyze(submission.content, title=submission.title)
@@ -567,31 +557,16 @@ def analyze_submission(submission_id: int, db: Session = Depends(get_db)):
                 try:
                     video_result = video_analyzer.analyze(submission.file_path)
                     video_score = video_result.get("score", 0)
-                    # 从视频中提取音频进行分析
-                    audio_result = audio_analyzer.analyze(submission.file_path)
-                    audio_score = audio_result.get("score", 0)
                 except Exception as e:
                     logger.error(f"视频分析错误: {e}")
                     video_result = {"frame_count": 0, "fps": 0, "keyframes_count": 0, "consistency": 0, "score": 0}
-                    audio_result = {"duration": 0, "sample_rate": 0, "noise": 0, "quality": 0, "score": 0}
                     video_score = 0
-                    audio_score = 0
-            # 音频格式
-            elif file_ext in ['mp3', 'wav', 'aac', 'flac', 'm4a']:
-                try:
-                    audio_result = audio_analyzer.analyze(submission.file_path)
-                    audio_score = audio_result.get("score", 0)
-                except Exception as e:
-                    logger.error(f"音频分析错误: {e}")
-                    audio_result = {"duration": 0, "sample_rate": 0, "noise": 0, "quality": 0, "score": 0}
-                    audio_score = 0
 
         # 3. 证据融合 - 动态权重 + 一致性检测
         fusion_result = EvidenceFusion.fuse(
             text_score=text_score if text_score > 0 else None,
             image_score=image_score if image_score > 0 else None,
             video_score=video_score if video_score > 0 else None,
-            audio_score=audio_score if audio_score > 0 else None,
             title_consistency_score=title_consistency_score,
             image_text_consistency_score=image_text_consistency_score
         )
@@ -621,12 +596,6 @@ def analyze_submission(submission_id: int, db: Session = Depends(get_db)):
             "keyframes": video_result.get("keyframes_count", 0),
             "consistency": video_result.get("consistency", 0) * 100
         }
-        audio_details_dict = {
-            "duration": audio_result.get("duration", 0),
-            "sample_rate": audio_result.get("sample_rate", 0),
-            "noise_level": audio_result.get("noise", 0),
-            "quality": audio_result.get("quality", 0) * 100
-        }
 
         # 保存分析结果
         analysis = AnalysisResult(
@@ -634,13 +603,11 @@ def analyze_submission(submission_id: int, db: Session = Depends(get_db)):
             text_score=text_score,
             image_score=image_score,
             video_score=video_score,
-            audio_score=audio_score,
             overall_score=overall_score,
             analysis_details=json.dumps(fusion_result, ensure_ascii=False),
             text_details=json.dumps(text_details_dict, ensure_ascii=False),
             image_details=json.dumps(image_details_dict, ensure_ascii=False),
-            video_details=json.dumps(video_details_dict, ensure_ascii=False),
-            audio_details=json.dumps(audio_details_dict, ensure_ascii=False)
+            video_details=json.dumps(video_details_dict, ensure_ascii=False)
         )
         db.add(analysis)
 
@@ -655,7 +622,6 @@ def analyze_submission(submission_id: int, db: Session = Depends(get_db)):
             "text_score": analysis.text_score,
             "image_score": analysis.image_score,
             "video_score": analysis.video_score,
-            "audio_score": analysis.audio_score,
             "overall_score": analysis.overall_score,
             "credibility_label": fusion_result["credibility_label"],
             "credibility_description": fusion_result["credibility_description"],
@@ -666,7 +632,6 @@ def analyze_submission(submission_id: int, db: Session = Depends(get_db)):
             "text_details": text_details_dict,
             "image_details": image_details_dict,
             "video_details": video_details_dict,
-            "audio_details": audio_details_dict,
             "created_at": analysis.created_at.isoformat() if analysis.created_at else ""
         }
     except Exception as e:
@@ -819,15 +784,7 @@ def get_models(db: Session = Depends(get_db)):
             "description": "视频内容分析模型",
             "status": "✅ 运行中"
         },
-        {
-            "id": model_id + 2,
-            "name": "Audio-Deepfake-Detector",
-            "model_type": "audio",
-            "version": "1.0",
-            "accuracy": "90.1%",
-            "description": "音频深度伪造检测模型",
-            "status": "✅ 运行中"
-        }
+
     ]
     models.extend(multimodal_models)
 
@@ -930,7 +887,6 @@ def get_report(submission_id: int, format: str = "json", db: Session = Depends(g
         "text_score": analysis.text_score,
         "image_score": analysis.image_score,
         "video_score": analysis.video_score,
-        "audio_score": analysis.audio_score,
         "overall_score": analysis.overall_score,
         "created_at": submission.created_at.isoformat() if submission.created_at else ""
     }
@@ -1061,7 +1017,6 @@ def get_report(submission_id: int, format: str = "json", db: Session = Depends(g
             [Paragraph("文本评分", normal_style), Paragraph(f"{report_data['text_score']:.2f}", normal_style)],
             [Paragraph("图像评分", normal_style), Paragraph(f"{report_data['image_score']:.2f}", normal_style)],
             [Paragraph("视频评分", normal_style), Paragraph(f"{report_data['video_score']:.2f}", normal_style)],
-            [Paragraph("音频评分", normal_style), Paragraph(f"{report_data['audio_score']:.2f}", normal_style)],
         ]
         scores_table = Table(scores_data, colWidths=[2.5*inch, 2*inch])
         scores_table.setStyle(TableStyle([
@@ -1129,7 +1084,6 @@ def get_report(submission_id: int, format: str = "json", db: Session = Depends(g
         <p><strong>文本评分:</strong> {report_data['text_score']:.2f}</p>
         <p><strong>图像评分:</strong> {report_data['image_score']:.2f}</p>
         <p><strong>视频评分:</strong> {report_data['video_score']:.2f}</p>
-        <p><strong>音频评分:</strong> {report_data['audio_score']:.2f}</p>
         <p><strong>综合可信度:</strong> {report_data['overall_score']:.2f}</p>
         </body>
         </html>
@@ -1168,7 +1122,7 @@ def get_pending_verifications(db: Session = Depends(get_db)):
     # 获取已完成分析但未审核的提交
     submissions = db.query(NewsSubmission).filter(
         NewsSubmission.status == "completed"
-    ).all()
+    ).order_by(NewsSubmission.created_at.desc()).all()
 
     result = []
     for submission in submissions:
@@ -1196,8 +1150,25 @@ def get_pending_verifications(db: Session = Depends(get_db)):
     return result
 
 @app.get("/api/verifier/submission/{submission_id}")
-def get_submission_detail(submission_id: int, db: Session = Depends(get_db)):
+def get_submission_detail(
+    submission_id: int, 
+    authorization: str = Header(None),
+    db: Session = Depends(get_db)
+):
     """获取新闻提交的详细信息（用于审核）"""
+    # 验证核查员身份
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="未授权")
+
+    token = authorization.replace("Bearer ", "")
+    payload = decode_token(token)
+    if not payload:
+        raise HTTPException(status_code=401, detail="令牌无效")
+
+    username = payload.get("sub")
+    user = db.query(User).filter(User.username == username).first()
+    if not user or not user.is_verifier:
+        raise HTTPException(status_code=403, detail="需要核查员权限")
     # 状态转换字典
     status_map = {
         'approved': '已批准',
@@ -1233,7 +1204,7 @@ def get_submission_detail(submission_id: int, db: Session = Depends(get_db)):
             "text_score": analysis.text_score if analysis else 0,
             "image_score": analysis.image_score if analysis else 0,
             "video_score": analysis.video_score if analysis else 0,
-            "audio_score": analysis.audio_score if analysis else 0,
+            "audio_score": 0,  # 已移除音频分析
             "overall_score": analysis.overall_score if analysis else 0,
             "analysis_details": analysis.analysis_details if analysis else ""
         } if analysis else None,

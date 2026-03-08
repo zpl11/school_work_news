@@ -92,13 +92,11 @@ class AnalysisResult(Base):
     text_score = Column(Float, default=0.0)
     image_score = Column(Float, default=0.0)
     video_score = Column(Float, default=0.0)
-    audio_score = Column(Float, default=0.0)
     overall_score = Column(Float, default=0.0)
     analysis_details = Column(Text)
     text_details = Column(Text)  # 文本分析详细指标
     image_details = Column(Text)  # 图像分析详细指标
     video_details = Column(Text)  # 视频分析详细指标
-    audio_details = Column(Text)  # 音频分析详细指标
     created_at = Column(DateTime, default=datetime.utcnow)
 
     submission = relationship("NewsSubmission", back_populates="analysis")

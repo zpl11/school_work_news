@@ -805,59 +805,14 @@ class VideoAnalyzer:
         except:
             return 0.5
 
-class AudioAnalyzer:
-    """音频分析 - 音频质量、噪声检测"""
-    def analyze(self, file_path: str) -> Dict[str, Any]:
-        try:
-            import librosa
-
-            # 加载音频
-            y, sr = librosa.load(file_path, sr=None)
-
-            # 音频时长
-            duration = librosa.get_duration(y=y, sr=sr)
-
-            # 音频质量评分（基于采样率）
-            quality_score = min(sr / 44100, 1.0)
-
-            # 噪声检测（基于频谱熵）
-            noise_score = self._detect_noise(y, sr)
-
-            overall = (quality_score * 0.6 + (1 - noise_score) * 0.4) * 100
-
-            return {
-                "duration": round(duration, 2),
-                "sample_rate": sr,
-                "quality": round(quality_score, 3),
-                "noise": round(noise_score, 3),
-                "score": round(overall, 2)
-            }
-        except Exception as e:
-            return {"error": f"音频分析失败: {str(e)}", "score": 0}
-
-    def _detect_noise(self, y, sr: int) -> float:
-        """检测音频中的噪声"""
-        try:
-            import librosa
-            # 计算频谱质心
-            S = librosa.feature.melspectrogram(y=y, sr=sr)
-            S_db = librosa.power_to_db(S, ref=np.max)
-
-            # 计算频谱熵作为噪声指标
-            entropy = -np.sum(S_db * np.log2(S_db + 1e-10)) / S_db.size
-
-            # 归一化到0-1
-            noise_score = min(entropy / 10, 1.0)
-            return noise_score
-        except:
-            return 0.2
+# [AudioAnalyzer removed]
 
 class EvidenceFusion:
     """证据融合 - 动态权重调整"""
 
     @staticmethod
     def fuse(text_score: float = None, image_score: float = None,
-             video_score: float = None, audio_score: float = None,
+             video_score: float = None,
              title_consistency_score: float = None,
              image_text_consistency_score: float = None) -> Dict[str, Any]:
         """
@@ -872,8 +827,6 @@ class EvidenceFusion:
             modalities['image'] = image_score
         if video_score is not None and video_score > 0:
             modalities['video'] = video_score
-        if audio_score is not None and audio_score > 0:
-            modalities['audio'] = audio_score
 
         # 如果没有任何有效模态，返回0
         if not modalities:
@@ -940,8 +893,7 @@ class EvidenceFusion:
         base_weights = {
             'text': 0.45,   # 文本基础权重最高
             'image': 0.25,  # 图像次之
-            'video': 0.20,  # 视频
-            'audio': 0.10   # 音频
+            'video': 0.30   # 视频
         }
 
         # 只有一个模态时，权重为100%
@@ -957,14 +909,13 @@ class EvidenceFusion:
         return weights
 
     @staticmethod
-    def fuse_simple(text_score: float, image_score: float, video_score: float, audio_score: float) -> float:
+    def fuse_simple(text_score: float, image_score: float, video_score: float) -> float:
         """简单融合（向后兼容）"""
-        result = EvidenceFusion.fuse(text_score, image_score, video_score, audio_score)
+        result = EvidenceFusion.fuse(text_score, image_score, video_score)
         return result["overall_score"]
 
 # 创建分析器实例
 text_analyzer = TextAnalyzer()
 image_analyzer = ImageAnalyzer()
 video_analyzer = VideoAnalyzer()
-audio_analyzer = AudioAnalyzer()
 

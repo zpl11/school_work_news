@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>信息核查员 - 新闻真实性核查系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: #5a67d8;
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .user-info {
+            background: rgba(255,255,255,0.15);
+            padding: 10px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 15px;
+        }
+
+        .tabs {
+            display: flex;
+            background: #f5f5f5;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            background: transparent;
+        }
+
+        .tab:hover {
+            background: #e0e0e0;
+        }
+
+        .tab.active {
+            background: white;
+            color: #5a67d8;
+            border-bottom: 3px solid #5a67d8;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 30px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: #5a67d8;
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .stat-card p {
+            font-size: 1em;
+            opacity: 0.9;
+        }
+
+        .submissions-list {
+            display: grid;
+            gap: 20px;
+        }
+
+        .submission-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 22px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .submission-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.25);
+            transform: translateY(-4px);
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+        }
+
+        .submission-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .submission-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .submission-status {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: #ffc107;
+            color: white;
+        }
+
+        .status-approved {
+            background: #28a745;
+            color: white;
+        }
+
+        .status-rejected {
+            background: #dc3545;
+            color: white;
+        }
+
+        .submission-content {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .submission-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9em;
+            color: #999;
+        }
+
+        .score-badge {
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: 600;
+        }
+
+        .score-high {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .score-medium {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .score-low {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background: white;
+            max-width: 1200px;
+            width: 95%;
+            margin: 30px auto;
+            border-radius: 15px;
+            padding: 35px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        /* 美化滚动条 */
+        .modal-content::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .modal-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .modal-header h2 {
+            color: #667eea;
+        }
+
+        .close-btn {
+            font-size: 2em;
+            cursor: pointer;
+            color: #999;
+            background: none;
+            border: none;
+        }
+
+        .close-btn:hover {
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #5a67d8;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #4c51bf;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(90, 103, 216, 0.4);
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .analysis-details {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .analysis-item {
+            text-align: center;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+        }
+
+        .analysis-item h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .analysis-item p {
+            font-size: 1.5em;
+            font-weight: 600;
+        }
+
+        .logout-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: white;
+            color: #5a67d8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <button class="logout-btn" onclick="logout()">退出登录</button>
+            <h1>🔍 信息核查员工作台</h1>
+            <p>专业审核 · 确保真实</p>
+            <div class="user-info">
+                <span id="username">加载中...</span> | 核查员
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('pending')">📋 待审核</button>
+            <button class="tab" onclick="switchTab('stats')">📊 统计数据</button>
+            <button class="tab" onclick="switchTab('history')">📜 审核历史</button>
+        </div>
+
+        <!-- 待审核标签页 -->
+        <div id="pending-tab" class="tab-content active">
+            <h2 style="margin-bottom: 20px;">待审核新闻列表</h2>
+            <div id="pending-list" class="submissions-list">
+                <p style="text-align: center; color: #999;">加载中...</p>
+            </div>
+        </div>
+
+        <!-- 统计数据标签页 -->
+        <div id="stats-tab" class="tab-content">
+            <h2 style="margin-bottom: 20px;">我的统计数据</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3 id="total-verifications">0</h3>
+                    <p>总审核数</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="approved-count">0</h3>
+                    <p>已批准</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="rejected-count">0</h3>
+                    <p>已拒绝</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="pending-count">0</h3>
+                    <p>待审核</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 审核历史标签页 -->
+        <div id="history-tab" class="tab-content">
+            <h2 style="margin-bottom: 20px;">我的审核历史</h2>
+            <div id="history-list" class="submissions-list">
+                <p style="text-align: center; color: #999;">加载中...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 审核模态框 -->
+    <div id="verification-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>审核新闻</h2>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+
+            <div id="modal-body">
+                <!-- 动态加载内容 -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const token = localStorage.getItem('token');
+        let currentSubmissionId = null;
+
+        // 状态转换函数
+        function getStatusText(status) {
+            const statusMap = {
+                'approved': '已批准',
+                'rejected': '已拒绝',
+                'needs_review': '需要复审',
+                'pending': '待审核'
+            };
+            return statusMap[status] || status;
+        }
+
+        // 检查登录状态
+        if (!token) {
+            alert('请先登录！');
+            window.location.href = '/';
+        }
+
+        // 验证核查员权限
+        fetch('/api/users/me', {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        })
+        .then(res => res.json())
+        .then(user => {
+            if (!user.is_verifier) {
+                alert('您没有核查员权限！');
+                window.location.href = '/';
+            }
+            document.getElementById('username').textContent = user.username;
+        })
+        .catch(err => {
+            console.error('验证失败:', err);
+            alert('验证失败，请重新登录');
+            window.location.href = '/';
+        });
+
+        // 切换标签页
+        function switchTab(tabName) {
+            // 隐藏所有标签页
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // 显示选中的标签页
+            document.getElementById(tabName + '-tab').classList.add('active');
+            event.target.classList.add('active');
+
+            // 加载对应数据
+            if (tabName === 'pending') {
+                loadPendingSubmissions();
+            } else if (tabName === 'stats') {
+                loadStats();
+            } else if (tabName === 'history') {
+                loadHistory();
+            }
+        }
+
+        // 加载待审核列表
+        function loadPendingSubmissions() {
+            fetch('/api/verifier/pending', {
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                const list = document.getElementById('pending-list');
+                if (data.length === 0) {
+                    list.innerHTML = '<p style="text-align: center; color: #999;">暂无待审核内容</p>';
+                    return;
+                }
+
+                list.innerHTML = data.map(item => {
+                    const scoreClass = item.analysis_score >= 70 ? 'score-high' :
+                                      item.analysis_score >= 40 ? 'score-medium' : 'score-low';
+                    const statusClass = item.verification_status === 'approved' ? 'status-approved' :
+                                       item.verification_status === 'rejected' ? 'status-rejected' : 'status-pending';
+                    const statusText = getStatusText(item.verification_status);
+                    const labelText = item.analysis_score >= 70 ? '真实' : item.analysis_score >= 40 ? '可疑' : '虚假';
+
+                    return `
+                        <div class="submission-card" onclick="openVerificationModal(${item.id})">
+                            <div class="submission-header">
+                                <div class="submission-title">${item.title}</div>
+                                <span class="submission-status ${statusClass}">${statusText}</span>
+                            </div>
+                            <div class="submission-content">${item.content}</div>
+                            <div class="submission-meta">
+                                <span>提交时间: ${item.created_at.split('T')[0]}</span>
+                                <span class="score-badge ${scoreClass}">AI评分: ${item.analysis_score.toFixed(2)} (${labelText})</span>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            })
+            .catch(err => {
+                console.error('加载失败:', err);
+                document.getElementById('pending-list').innerHTML =
+                    '<p style="text-align: center; color: #dc3545;">加载失败，请刷新重试</p>';
+            });
+        }
+
+        // 加载统计数据
+        function loadStats() {
+            fetch('/api/verifier/stats', {
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('total-verifications').textContent = data.total_verifications;
+                document.getElementById('approved-count').textContent = data.approved_count;
+                document.getElementById('rejected-count').textContent = data.rejected_count;
+                document.getElementById('pending-count').textContent = data.pending_count;
+            })
+            .catch(err => {
+                console.error('加载统计数据失败:', err);
+            });
+        }
+
+        // 加载审核历史
+        function loadHistory() {
+            fetch('/api/verifier/history', {
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                const list = document.getElementById('history-list');
+                if (data.length === 0) {
+                    list.innerHTML = '<p style="text-align: center; color: #999;">暂无审核历史</p>';
+                    return;
+                }
+
+                list.innerHTML = data.map(item => {
+                    const statusClass = item.verification_status === 'approved' ? 'status-approved' :
+                                       item.verification_status === 'rejected' ? 'status-rejected' : 'status-pending';
+                    const statusText = getStatusText(item.verification_status);
+
+                    return `
+                        <div class="submission-card" onclick="viewHistoryDetail(${item.submission_id})" style="cursor: pointer; transition: all 0.3s;">
+                            <div class="submission-header">
+                                <div class="submission-title">${item.submission_title}</div>
+                                <span class="submission-status ${statusClass}">${statusText}</span>
+                            </div>
+                            <div class="submission-content">${item.verification_comment}</div>
+                            <div class="submission-meta">
+                                <span>审核时间: ${item.created_at.split('T')[0]}</span>
+                                ${item.credibility_adjustment ?
+                                    `<span>调整评分: ${item.credibility_adjustment.toFixed(2)}</span>` : ''}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            })
+            .catch(err => {
+                console.error('加载历史失败:', err);
+                document.getElementById('history-list').innerHTML =
+                    '<p style="text-align: center; color: #dc3545;">加载失败，请刷新重试</p>';
+            });
+        }
+
+        // 查看历史详情（只读模式）
+        function viewHistoryDetail(submissionId) {
+            fetch(`/api/verifier/submission/${submissionId}`, {
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                const submission = data.submission;
+                const analysis = data.analysis;
+                const verifications = data.verifications;
+
+                // 修改模态框标题
+                document.querySelector('#verification-modal .modal-header h2').textContent = '审核详情（历史记录）';
+
+                const modalBody = document.getElementById('modal-body');
+                modalBody.innerHTML = `
+                    <!-- 顶部横幅 -->
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; border-radius: 12px; margin-bottom: 25px; color: white; text-align: center; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);">
+                        <h3 style="margin: 0 0 8px 0; font-size: 1.5em;">📜 历史审核记录</h3>
+                        <p style="margin: 0; font-size: 1em; opacity: 0.95;">此为已完成的审核记录，仅供查看</p>
+                    </div>
+
+                    <!-- 基本信息区域 -->
+                    <div style="background: #f8f9fa; padding: 25px; border-radius: 12px; margin-bottom: 25px;">
+                        <h3 style="color: #333; margin: 0 0 20px 0; font-size: 1.3em; border-bottom: 2px solid #667eea; padding-bottom: 10px;">📋 基本信息</h3>
+
+                        <div class="form-group" style="margin-bottom: 18px;">
+                            <label style="font-size: 1em; color: #555;">新闻标题</label>
+                            <input type="text" value="${submission.title}" readonly style="background: white; font-size: 1.05em; font-weight: 500;">
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 18px;">
+                            <label style="font-size: 1em; color: #555;">新闻内容</label>
+                            <textarea readonly rows="8" style="background: white; font-size: 1em; line-height: 1.6; resize: vertical;">${submission.content}</textarea>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label style="font-size: 1em; color: #555;">提交时间</label>
+                                <input type="text" value="${submission.created_at.split('T')[0]}" readonly style="background: white;">
+                            </div>
+                            ${submission.is_self_check ? `
+                            <div style="display: flex; align-items: center;">
+                                <div style="background: #fff3cd; padding: 12px 20px; border-radius: 8px; border-left: 4px solid #ffc107; width: 100%;">
+                                    <strong style="color: #856404; font-size: 1.05em;">🔍 自检模式</strong>
+                                    <p style="margin: 5px 0 0 0; color: #856404; font-size: 0.9em;">不进入正式审核流程</p>
+                                </div>
+                            </div>
+                            ` : ''}
+                        </div>
+                    </div>
+
+                    <!-- AI分析结果区域 -->
+                    ${analysis ? `
+                    <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 25px; border-radius: 12px; margin-bottom: 25px; border: 2px solid #667eea;">
+                        <h3 style="color: #667eea; margin: 0 0 20px 0; font-size: 1.3em; display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 1.5em;">🤖</span>
+                            <span>AI分析结果</span>
+                        </h3>
+
+                        <!-- 评分网格 -->
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 20px;">
+                            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; border-radius: 10px; text-align: center; box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);">
+                                <div style="color: rgba(255,255,255,0.9); font-size: 0.95em; margin-bottom: 8px; font-weight: 500;">📝 文本评分</div>
+                                <div style="color: white; font-size: 2.2em; font-weight: bold;">${analysis.text_score.toFixed(2)}</div>
+                            </div>
+                            <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 20px; border-radius: 10px; text-align: center; box-shadow: 0 4px 10px rgba(245, 87, 108, 0.3);">
+                                <div style="color: rgba(255,255,255,0.9); font-size: 0.95em; margin-bottom: 8px; font-weight: 500;">🖼️ 图像评分</div>
+                                <div style="color: white; font-size: 2.2em; font-weight: bold;">${analysis.image_score.toFixed(2)}</div>
+                            </div>
+                            <div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); padding: 20px; border-radius: 10px; text-align: center; box-shadow: 0 4px 10px rgba(0, 242, 254, 0.3);">
+                                <div style="color: rgba(255,255,255,0.9); font-size: 0.95em; margin-bottom: 8px; font-weight: 500;">🎬 视频评分</div>
+                                <div style="color: white; font-size: 2.2em; font-weight: bold;">${analysis.video_score.toFixed(2)}</div>
+                            </div>
+                            <div style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); padding: 20px; border-radius: 10px; text-align: center; box-shadow: 0 4px 10px rgba(56, 249, 215, 0.3);">
+                                <div style="color: rgba(255,255,255,0.9); font-size: 0.95em; margin-bottom: 8px; font-weight: 500;">🔊 音频评分</div>
+                                <div style="color: white; font-size: 2.2em; font-weight: bold;">${analysis.audio_score.toFixed(2)}</div>
+                            </div>
+                        </div>
+
+                        <!-- 综合评分 -->
+                        <div style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); padding: 25px; border-radius: 12px; text-align: center; box-shadow: 0 6px 20px rgba(250, 112, 154, 0.4);">
+                            <div style="color: rgba(0,0,0,0.7); font-size: 1.1em; margin-bottom: 10px; font-weight: 600;">🎯 综合可信度评分</div>
+                            <div style="color: #fff; font-size: 3em; font-weight: bold; text-shadow: 2px 2px 4px rgba(0,0,0,0.2);">${analysis.overall_score.toFixed(2)}</div>
+                        </div>
+
+                        <!-- AI分析详情 -->
+                        ${analysis.analysis_details ? `
+                        <div style="background: white; padding: 20px; border-radius: 10px; margin-top: 20px; border-left: 4px solid #667eea;">
+                            <h4 style="color: #667eea; margin: 0 0 12px 0; font-size: 1.1em;">📊 详细分析</h4>
+                            <div style="color: #666; line-height: 1.8; white-space: pre-wrap; font-size: 0.95em;">${analysis.analysis_details}</div>
+                        </div>
+                        ` : ''}
+                    </div>
+                    ` : '<div style="background: #f8f9fa; padding: 30px; border-radius: 12px; text-align: center; color: #999; margin-bottom: 25px;"><p style="margin: 0; font-size: 1.1em;">暂无AI分析结果</p></div>'}
+
+                    <!-- 审核记录区域 -->
+                    ${verifications.length > 0 ? `
+                    <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 25px; border-radius: 12px; margin-bottom: 25px; border: 2px solid #28a745;">
+                        <h3 style="color: #28a745; margin: 0 0 20px 0; font-size: 1.3em; display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 1.5em;">✅</span>
+                            <span>人工审核记录</span>
+                        </h3>
+
+                        ${verifications.map(v => {
+                            const statusClass = v.verification_status === 'approved' ? '#28a745' :
+                                               v.verification_status === 'rejected' ? '#dc3545' : '#ffc107';
+                            const statusBg = v.verification_status === 'approved' ? 'linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%)' :
+                                            v.verification_status === 'rejected' ? 'linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%)' :
+                                            'linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%)';
+                            const statusIcon = v.verification_status === 'approved' ? '✅' :
+                                              v.verification_status === 'rejected' ? '❌' : '⚠️';
+
+                            return `
+                            <div style="margin-bottom: 20px; padding: 20px; background: white; border-radius: 10px; border-left: 5px solid ${statusClass}; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                <!-- 审核状态头部 -->
+                                <div style="background: ${statusBg}; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                        <strong style="color: ${statusClass}; font-size: 1.2em;">${statusIcon} ${getStatusText(v.verification_status)}</strong>
+                                        <span style="color: #666; font-size: 0.95em;">📅 ${v.created_at.split('T')[0]}</span>
+                                    </div>
+                                    ${v.credibility_adjustment ? `
+                                    <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(0,0,0,0.1);">
+                                        <span style="color: #666; font-size: 0.95em;">调整后评分：</span>
+                                        <span style="color: ${statusClass}; font-size: 1.8em; font-weight: bold; margin-left: 10px;">${v.credibility_adjustment.toFixed(2)}</span>
+                                    </div>
+                                    ` : ''}
+                                </div>
+
+                                <!-- 审核意见 -->
+                                <div style="margin-bottom: 15px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+                                    <h4 style="color: #333; margin: 0 0 10px 0; font-size: 1.05em; display: flex; align-items: center; gap: 8px;">
+                                        <span>💬</span>
+                                        <span>审核意见</span>
+                                    </h4>
+                                    <p style="margin: 0; color: #555; line-height: 1.6; font-size: 1em; white-space: pre-wrap;">${v.verification_comment || '无'}</p>
+                                </div>
+
+                                <!-- 证据链接 -->
+                                ${v.evidence_links ? `
+                                <div style="margin-bottom: 15px; padding: 15px; background: #e7f3ff; border-radius: 8px; border-left: 3px solid #667eea;">
+                                    <h4 style="color: #667eea; margin: 0 0 10px 0; font-size: 1.05em; display: flex; align-items: center; gap: 8px;">
+                                        <span>🔗</span>
+                                        <span>证据链接</span>
+                                    </h4>
+                                    <p style="margin: 0; color: #667eea; word-break: break-all; font-size: 0.95em; line-height: 1.6;">${v.evidence_links}</p>
+                                </div>
+                                ` : ''}
+
+                                <!-- 问题标注 -->
+                                ${v.has_issue ? `
+                                <div style="background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%); padding: 18px; border-radius: 8px; border-left: 4px solid #ffc107;">
+                                    <h4 style="color: #856404; margin: 0 0 12px 0; font-size: 1.1em; display: flex; align-items: center; gap: 8px;">
+                                        <span>⚠️</span>
+                                        <span>问题标注</span>
+                                    </h4>
+                                    <div style="color: #856404; line-height: 1.8; font-size: 0.95em;">
+                                        <div style="margin-bottom: 8px;">
+                                            <strong>问题类型：</strong>
+                                            <span style="background: #fff; padding: 4px 12px; border-radius: 4px; margin-left: 5px;">
+                                                ${v.issue_type === 'false_positive' ? '🔴 错检（误报）' :
+                                                  v.issue_type === 'false_negative' ? '🟡 漏检（漏报）' : '🟢 正常'}
+                                            </span>
+                                        </div>
+                                        ${v.issue_description ? `
+                                        <div style="margin-bottom: 8px;">
+                                            <strong>问题描述：</strong>
+                                            <span>${v.issue_description}</span>
+                                        </div>
+                                        ` : ''}
+                                        ${v.correct_label ? `
+                                        <div style="margin-bottom: 8px;">
+                                            <strong>正确标签：</strong>
+                                            <span style="background: #fff; padding: 4px 12px; border-radius: 4px; margin-left: 5px;">${v.correct_label}</span>
+                                        </div>
+                                        ` : ''}
+                                        ${v.correct_score ? `
+                                        <div>
+                                            <strong>正确评分：</strong>
+                                            <span style="background: #fff; padding: 4px 12px; border-radius: 4px; margin-left: 5px; font-weight: bold;">${v.correct_score}</span>
+                                        </div>
+                                        ` : ''}
+                                    </div>
+                                </div>
+                                ` : ''}
+                            </div>
+                            `;
+                        }).join('')}
+                    </div>
+                    ` : '<div style="background: #f8f9fa; padding: 30px; border-radius: 12px; text-align: center; color: #999; margin-bottom: 25px;"><p style="margin: 0; font-size: 1.1em;">暂无审核记录</p></div>'}
+
+                    <!-- 关闭按钮 -->
+                    <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 2px solid #e0e0e0;">
+                        <button onclick="closeModal()" style="background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%); color: white; border: none; padding: 14px 40px; border-radius: 10px; cursor: pointer; font-size: 1.05em; font-weight: 600; box-shadow: 0 4px 10px rgba(108, 117, 125, 0.3); transition: all 0.3s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 15px rgba(108, 117, 125, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 10px rgba(108, 117, 125, 0.3)';">
+                            关闭
+                        </button>
+                    </div>
+                `;
+
+                document.getElementById('verification-modal').style.display = 'flex';
+            })
+            .catch(err => {
+                console.error('加载详情失败:', err);
+                alert('加载详情失败，请重试');
+            });
+        }
+
+        // 打开审核模态框
+        function openVerificationModal(submissionId) {
+            currentSubmissionId = submissionId;
+
+            // 恢复模态框标题
+            document.querySelector('#verification-modal .modal-header h2').textContent = '审核新闻';
+
+            fetch(`/api/verifier/submission/${submissionId}`, {
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                const submission = data.submission;
+                const analysis = data.analysis;
+                const verifications = data.verifications;
+
+                const modalBody = document.getElementById('modal-body');
+                modalBody.innerHTML = `
+                    <div class="form-group">
+                        <label>新闻标题</label>
+                        <input type="text" value="${submission.title}" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label>新闻内容</label>
+                        <textarea readonly>${submission.content}</textarea>
+                    </div>
+
+                    ${analysis ? `
+                    <div class="analysis-details">
+                        <h3>AI分析结果</h3>
+                        <div class="analysis-grid">
+                            <div class="analysis-item">
+                                <h4>文本评分</h4>
+                                <p>${analysis.text_score.toFixed(2)}</p>
+                            </div>
+                            <div class="analysis-item">
+                                <h4>图像评分</h4>
+                                <p>${analysis.image_score.toFixed(2)}</p>
+                            </div>
+                            <div class="analysis-item">
+                                <h4>视频评分</h4>
+                                <p>${analysis.video_score.toFixed(2)}</p>
+                            </div>
+                            <div class="analysis-item">
+                                <h4>音频评分</h4>
+                                <p>${analysis.audio_score.toFixed(2)}</p>
+                            </div>
+                            <div class="analysis-item">
+                                <h4>综合评分</h4>
+                                <p style="color: #667eea; font-size: 2em;">${analysis.overall_score.toFixed(2)}</p>
+                            </div>
+                        </div>
+                    </div>
+                    ` : ''}
+
+                    ${verifications.length > 0 ? `
+                    <div class="analysis-details">
+                        <h3>历史审核记录</h3>
+                        ${verifications.map(v => `
+                            <div style="margin-top: 10px; padding: 10px; background: white; border-radius: 5px;">
+                                <strong>状态:</strong> ${getStatusText(v.verification_status)} |
+                                <strong>评分:</strong> ${v.credibility_adjustment || 'N/A'}<br>
+                                <strong>意见:</strong> ${v.verification_comment}<br>
+                                <small>时间: ${v.created_at.split('T')[0]}</small>
+                            </div>
+                        `).join('')}
+                    </div>
+                    ` : ''}
+
+                    <div class="form-group">
+                        <label>审核状态 *</label>
+                        <select id="verification-status">
+                            <option value="approved">✅ 批准</option>
+                            <option value="rejected">❌ 拒绝</option>
+                            <option value="needs_review">⚠️ 需要复审</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>调整可信度评分（可选，0-100）</label>
+                        <input type="number" id="credibility-adjustment" min="0" max="100" step="0.01"
+                               placeholder="留空则不调整" value="${analysis ? analysis.overall_score.toFixed(2) : ''}">
+                    </div>
+
+                    <div class="form-group">
+                        <label>审核意见 *</label>
+                        <textarea id="verification-comment" placeholder="请输入您的专业审核意见..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>证据链接（可选，多个链接用逗号分隔）</label>
+                        <input type="text" id="evidence-links" placeholder="https://example.com/evidence1, https://example.com/evidence2">
+                    </div>
+
+                    <!-- 新增：问题标注区域 -->
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-top: 20px; border-left: 4px solid #5a67d8;">
+                        <h3 style="margin-bottom: 15px; color: #5a67d8;">🔍 AI分析问题标注</h3>
+                        <p style="color: #666; margin-bottom: 15px; font-size: 0.95em;">
+                            如果AI分析存在错误（错检或漏检），请在此标注问题详情，帮助改进模型准确性。
+                        </p>
+
+                        <div class="form-group">
+                            <label style="display: flex; align-items: center; cursor: pointer;">
+                                <input type="checkbox" id="has-issue" onchange="toggleIssueFields()" style="margin-right: 10px; width: 20px; height: 20px;">
+                                <strong>AI分析存在问题</strong>
+                            </label>
+                        </div>
+
+                        <div id="issue-fields" style="display: none; margin-top: 15px; padding: 15px; background: white; border-radius: 8px;">
+                            <div class="form-group">
+                                <label>问题类型 *</label>
+                                <select id="issue-type">
+                                    <option value="">请选择问题类型</option>
+                                    <option value="normal">✅ 正常 - AI分析准确</option>
+                                    <option value="false_positive">⚠️ 错检 - AI误判为虚假（实际为真实）</option>
+                                    <option value="false_negative">⚠️ 漏检 - AI误判为真实（实际为虚假）</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>问题详细描述 *</label>
+                                <textarea id="issue-description" placeholder="请详细描述AI分析的问题所在，例如：AI判断为虚假，但经核实该新闻来源可靠，内容属实..." rows="4"></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label>正确的标签</label>
+                                <select id="correct-label">
+                                    <option value="">请选择正确标签</option>
+                                    <option value="真实">✅ 真实</option>
+                                    <option value="虚假">❌ 虚假</option>
+                                    <option value="部分真实">⚠️ 部分真实</option>
+                                    <option value="无法判断">❓ 无法判断</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>正确的评分（0-100）</label>
+                                <input type="number" id="correct-score" min="0" max="100" step="0.01" placeholder="输入您认为正确的可信度评分">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="btn-group">
+                        <button class="btn btn-primary" onclick="submitVerification()">提交审核</button>
+                        <button class="btn btn-secondary" onclick="closeModal()">取消</button>
+                    </div>
+                `;
+
+                document.getElementById('verification-modal').style.display = 'block';
+            })
+            .catch(err => {
+                console.error('加载详情失败:', err);
+                alert('加载失败，请重试');
+            });
+        }
+
+        // 新增：切换问题标注字段显示
+        function toggleIssueFields() {
+            const hasIssue = document.getElementById('has-issue').checked;
+            const issueFields = document.getElementById('issue-fields');
+            issueFields.style.display = hasIssue ? 'block' : 'none';
+        }
+
+        // 关闭模态框
+        function closeModal() {
+            document.getElementById('verification-modal').style.display = 'none';
+            currentSubmissionId = null;
+        }
+
+        // 提交审核
+        function submitVerification() {
+            const status = document.getElementById('verification-status').value;
+            const adjustment = document.getElementById('credibility-adjustment').value;
+            const comment = document.getElementById('verification-comment').value;
+            const evidence = document.getElementById('evidence-links').value;
+
+            // 新增：获取问题标注信息
+            const hasIssue = document.getElementById('has-issue').checked;
+            const issueType = document.getElementById('issue-type').value;
+            const issueDescription = document.getElementById('issue-description').value;
+            const correctLabel = document.getElementById('correct-label').value;
+            const correctScore = document.getElementById('correct-score').value;
+
+            if (!comment.trim()) {
+                alert('请输入审核意见');
+                return;
+            }
+
+            // 新增：验证问题标注字段
+            if (hasIssue) {
+                if (!issueType) {
+                    alert('请选择问题类型');
+                    return;
+                }
+                if (!issueDescription.trim()) {
+                    alert('请输入问题详细描述');
+                    return;
+                }
+            }
+
+            const data = {
+                submission_id: currentSubmissionId,
+                verification_status: status,
+                credibility_adjustment: adjustment ? parseFloat(adjustment) : null,
+                verification_comment: comment,
+                evidence_links: evidence || null,
+                // 新增：问题标注数据
+                has_issue: hasIssue,
+                issue_type: hasIssue ? issueType : null,
+                issue_description: hasIssue ? issueDescription : null,
+                correct_label: hasIssue && correctLabel ? correctLabel : null,
+                correct_score: hasIssue && correctScore ? parseFloat(correctScore) : null
+            };
+
+            fetch('/api/verifier/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify(data)
+            })
+            .then(res => res.json())
+            .then(result => {
+                const successMsg = hasIssue ?
+                    '✅ 审核提交成功！问题标注已记录，将用于改进AI模型。' :
+                    '✅ 审核提交成功！';
+                alert(successMsg);
+                closeModal();
+                loadPendingSubmissions();
+            })
+            .catch(err => {
+                console.error('提交失败:', err);
+                alert('提交失败，请重试');
+            });
+        }
+
+        // 退出登录
+        function logout() {
+            localStorage.removeItem('token');
+            window.location.href = '/';
+        }
+
+        // 初始加载
+        loadPendingSubmissions();
+        loadStats();
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,32 @@
+# Virtual Environment
+venv/
+code/code/venv/
+env/
+.env
+
+# Cache
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# IDE
+.idea/
+.vscode/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Models
+models/*.pkl
+models/*.pth
+models/*.bin
+models/*.h5
+
+# Datasets & Uploads
+liar.zip
+datasets/
+code/code/datasets/
+uploads/
+code/code/uploads/

@@ -49,7 +49,6 @@ class AnalysisResultResponse(BaseModel):
     text_score: float
     image_score: float
     video_score: float
-    audio_score: float
     overall_score: float
     analysis_details: str
     created_at: datetime

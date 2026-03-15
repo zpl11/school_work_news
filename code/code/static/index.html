@@ -349,11 +349,11 @@
                         <textarea id="newsContent" placeholder="输入新闻内容" rows="6"></textarea>
                     </div>
                     <div class="form-group">
-                        <label>上传文件 (Word/PDF/图片/视频/音频)</label>
+                        <label>上传文件 (Word/PDF/图片/视频)</label>
                         <input type="file" id="newsFile"
-                            accept=".doc,.docx,.pdf,.jpg,.jpeg,.png,.gif,.mp4,.avi,.mov,.mp3,.wav">
+                            accept=".doc,.docx,.pdf,.jpg,.jpeg,.png,.gif,.mp4,.avi,.mov">
                         <small style="color: #666; display: block; margin-top: 5px;">支持格式: Word(.doc/.docx), PDF,
-                            图片(jpg/png/gif), 视频(mp4/avi/mov), 音频(mp3/wav)</small>
+                            图片(jpg/png/gif), 视频(mp4/avi/mov)</small>
                     </div>
                     <button onclick="submitNews()" id="submitBtn">提交新闻</button>
                 </div>
@@ -378,7 +378,7 @@
                                     style="margin-right: 10px; width: 20px; height: 20px;">
                                 <div>
                                     <strong>📤 正式提交</strong>
-                                    <p style="margin: 5px 0 0 0; font-size: 0.9em; color: #666;">提交视频/音频进行正式审核</p>
+                                    <p style="margin: 5px 0 0 0; font-size: 0.9em; color: #666;">提交视频进行正式审核</p>
                                 </div>
                             </label>
                             <label
@@ -396,7 +396,7 @@
                             style="margin-top: 15px; padding: 12px; background: white; border-radius: 8px; border-left: 3px solid #28a745;">
                             <strong>📤 正式提交模式</strong>
                             <p style="margin: 5px 0 0 0; color: #666; font-size: 0.9em;">
-                                提交的视频/音频将进入正式审核流程，核查员会进行人工复核。
+                                提交的视频将进入正式审核流程，核查员会进行人工复核。
                             </p>
                         </div>
                     </div>
@@ -410,12 +410,11 @@
                         <textarea id="mediaDescription" placeholder="输入描述" rows="6"></textarea>
                     </div>
                     <div class="form-group">
-                        <label>上传文件 (视频或音频)</label>
+                        <label>上传文件 (视频)</label>
                         <input type="file" id="mediaFile"
-                            accept=".mp4,.avi,.mov,.mkv,.flv,.wmv,.mp3,.wav,.aac,.flac,.m4a">
+                            accept=".mp4,.avi,.mov,.mkv,.flv,.wmv">
                         <small style="color: #666; display: block; margin-top: 5px;">
                             视频格式: MP4, AVI, MOV, MKV, FLV, WMV<br>
-                            音频格式: MP3, WAV, AAC, FLAC, M4A<br>
                             (最大500MB)
                         </small>
                     </div>
@@ -758,10 +757,6 @@ GET  /redoc         (ReDoc)</pre>
                                         <div style="font-size: 12px; color: #6b7280; margin-bottom: 5px;">视频</div>
                                         <div style="font-size: 18px; font-weight: bold; color: #f59e0b;">${(sub.ai_analysis?.video_score || 0).toFixed(1)}</div>
                                     </div>
-                                    <div style="text-align: center; padding: 10px; background: #fce7f3; border-radius: 8px;">
-                                        <div style="font-size: 12px; color: #6b7280; margin-bottom: 5px;">音频</div>
-                                        <div style="font-size: 18px; font-weight: bold; color: #ec4899;">${(sub.ai_analysis?.audio_score || 0).toFixed(1)}</div>
-                                    </div>
                                     <div style="text-align: center; padding: 10px; background: #f3e8ff; border-radius: 8px;">
                                         <div style="font-size: 12px; color: #6b7280; margin-bottom: 5px;">综合评分</div>
                                         <div style="font-size: 20px; font-weight: bold; color: #8b5cf6;">${(sub.ai_analysis?.overall_score || 0).toFixed(1)}</div>
@@ -1004,11 +999,11 @@ GET  /redoc         (ReDoc)</pre>
                 modeDescription.innerHTML = `
                     <strong>📤 正式提交模式</strong>
                     <p style="margin: 5px 0 0 0; color: #666; font-size: 0.9em;">
-                        提交的视频/音频将进入正式审核流程，核查员会进行人工复核。
+                        提交的视频将进入正式审核流程，核查员会进行人工复核。
                     </p>
                 `;
                 modeDescription.style.borderLeftColor = '#28a745';
-                submitBtn.textContent = '📤 提交视频/音频';
+                submitBtn.textContent = '📤 提交视频';
                 submitBtn.style.background = '#4a90e2';
             }
         }

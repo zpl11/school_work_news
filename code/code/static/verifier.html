@@ -712,19 +712,22 @@
                         </h3>
 
                         <!-- 评分网格 -->
-                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 20px;">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 20px;">
+                            ${analysis.text_score > 0 ? `
                             <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; border-radius: 10px; text-align: center; box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);">
                                 <div style="color: rgba(255,255,255,0.9); font-size: 0.95em; margin-bottom: 8px; font-weight: 500;">📝 文本评分</div>
                                 <div style="color: white; font-size: 2.2em; font-weight: bold;">${analysis.text_score.toFixed(2)}</div>
-                            </div>
+                            </div>` : ''}
+                            ${analysis.image_score > 0 ? `
                             <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 20px; border-radius: 10px; text-align: center; box-shadow: 0 4px 10px rgba(245, 87, 108, 0.3);">
                                 <div style="color: rgba(255,255,255,0.9); font-size: 0.95em; margin-bottom: 8px; font-weight: 500;">🖼️ 图像评分</div>
                                 <div style="color: white; font-size: 2.2em; font-weight: bold;">${analysis.image_score.toFixed(2)}</div>
-                            </div>
+                            </div>` : ''}
+                            ${analysis.video_score > 0 ? `
                             <div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); padding: 20px; border-radius: 10px; text-align: center; box-shadow: 0 4px 10px rgba(0, 242, 254, 0.3);">
                                 <div style="color: rgba(255,255,255,0.9); font-size: 0.95em; margin-bottom: 8px; font-weight: 500;">🎬 视频评分</div>
                                 <div style="color: white; font-size: 2.2em; font-weight: bold;">${analysis.video_score.toFixed(2)}</div>
-                            </div>
+                            </div>` : ''}
                         </div>
 
                         <!-- 综合评分 -->
@@ -888,18 +891,21 @@
                     <div class="analysis-details">
                         <h3>AI分析结果</h3>
                         <div class="analysis-grid">
+                            ${(analysis?.text_score > 0) ? `
                             <div class="analysis-item">
                                 <h4>文本评分</h4>
-                                <p>${(analysis?.text_score || 0).toFixed(2)}</p>
-                            </div>
+                                <p>${analysis.text_score.toFixed(2)}</p>
+                            </div>` : ''}
+                            ${(analysis?.image_score > 0) ? `
                             <div class="analysis-item">
                                 <h4>图像评分</h4>
-                                <p>${(analysis?.image_score || 0).toFixed(2)}</p>
-                            </div>
+                                <p>${analysis.image_score.toFixed(2)}</p>
+                            </div>` : ''}
+                            ${(analysis?.video_score > 0) ? `
                             <div class="analysis-item">
                                 <h4>视频评分</h4>
-                                <p>${(analysis?.video_score || 0).toFixed(2)}</p>
-                            </div>
+                                <p>${analysis.video_score.toFixed(2)}</p>
+                            </div>` : ''}
                             <div class="analysis-item">
                                 <h4>综合评分</h4>
                                 <p style="color: #667eea; font-size: 2em;">${(analysis?.overall_score || 0).toFixed(2)}</p>

@@ -805,7 +805,7 @@ class VideoAnalyzer:
         except:
             return 0.5
 
-# [AudioAnalyzer removed]
+
 
 class EvidenceFusion:
     """证据融合 - 动态权重调整"""

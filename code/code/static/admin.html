@@ -921,9 +921,9 @@
 
                 <div style="background: #e3f2fd; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
                     <h3 style="margin-top: 0; color: #1976d2;">🤖 AI分析结果</h3>
-                    <p><strong>文本评分：</strong>${analysis.text_score ? analysis.text_score.toFixed(2) : '无'}</p>
-                    <p><strong>图像评分：</strong>${analysis.image_score ? analysis.image_score.toFixed(2) : '无'}</p>
-                    <p><strong>视频评分：</strong>${analysis.video_score ? analysis.video_score.toFixed(2) : '无'}</p>
+                    ${analysis.text_score > 0 ? `<p><strong>文本评分：</strong>${analysis.text_score.toFixed(2)}</p>` : ''}
+                    ${analysis.image_score > 0 ? `<p><strong>图像评分：</strong>${analysis.image_score.toFixed(2)}</p>` : ''}
+                    ${analysis.video_score > 0 ? `<p><strong>视频评分：</strong>${analysis.video_score.toFixed(2)}</p>` : ''}
                     <p><strong>综合可信度：</strong><span style="font-size: 1.2em; font-weight: bold; color: ${scoreColor};">${overallScore.toFixed(2)} 分 - ${credibilityLabel}</span></p>
                     ${credibilityDesc ? `<p><strong>判定说明：</strong>${credibilityDesc}</p>` : ''}
                     ${analysis.modalities_used ? `<p><strong>使用模态：</strong>${analysis.modalities_used.join(', ')}</p>` : ''}

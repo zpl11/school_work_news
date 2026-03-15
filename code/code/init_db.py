@@ -106,7 +106,6 @@ def init_default_data():
         {"name": "BERT-Text", "model_type": "text", "version": "1.0", "accuracy": 0.92},
         {"name": "ResNet-Image", "model_type": "image", "version": "1.0", "accuracy": 0.88},
         {"name": "3D-CNN-Video", "model_type": "video", "version": "1.0", "accuracy": 0.85},
-        {"name": "Wav2Vec-Audio", "model_type": "audio", "version": "1.0", "accuracy": 0.83},
     ]
 
     for model_data in models:

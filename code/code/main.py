@@ -1220,7 +1220,6 @@ def get_submission_detail(
             "text_score": analysis.text_score if analysis else 0,
             "image_score": analysis.image_score if analysis else 0,
             "video_score": analysis.video_score if analysis else 0,
-            "audio_score": 0,  # 已移除音频分析
             "overall_score": analysis.overall_score if analysis else 0,
             "analysis_details": analysis.analysis_details if analysis else ""
         } if analysis else None,

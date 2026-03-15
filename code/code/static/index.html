@@ -292,7 +292,7 @@
             <div class="navbar-brand">🔍 新闻真实性核查系统</div>
             <div class="navbar-menu">
                 <a onclick="switchTab('submit')">📝 文本/图像提交</a>
-                <a onclick="switchTab('mediaSubmit')">🎬 视频/音频提交</a>
+                <a onclick="switchTab('mediaSubmit')">🎬 视频提交</a>
                 <a onclick="switchTab('history')">📋 查看提交历史</a>
             </div>
             <div class="navbar-user">
@@ -363,7 +363,7 @@
 
             <div id="mediaSubmit" class="tab-content">
                 <div class="card">
-                    <h2>🎬 视频/音频提交</h2>
+                    <h2>🎬 视频提交</h2>
                     <div id="mediaSubmitMessage" class="message" style="display:none;"></div>
 
                     <!-- 新增：提交模式选择 -->
@@ -984,7 +984,7 @@ GET  /redoc         (ReDoc)</pre>
             }
         }
 
-        // 新增：更新视频/音频提交模式UI
+        // 新增：更新视频提交模式UI
         function updateMediaSubmitMode() {
             const mode = document.querySelector('input[name="mediaSubmitMode"]:checked').value;
             const modeDescription = document.getElementById('mediaModeDescription');
@@ -1095,10 +1095,6 @@ GET  /redoc         (ReDoc)</pre>
                             <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #00f2fe;">
                                 <p style="color: #666; margin: 0 0 5px 0;">🎬 视频评分</p>
                                 <h3 style="color: #00f2fe; margin: 0;">${(data?.video_score || 0).toFixed(2)}</h3>
-                            </div>
-                            <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #38f9d7;">
-                                <p style="color: #666; margin: 0 0 5px 0;">🔊 音频评分</p>
-                                <h3 style="color: #38f9d7; margin: 0;">${(data?.audio_score || 0).toFixed(2)}</h3>
                             </div>
                         </div>
 
@@ -1258,10 +1254,6 @@ GET  /redoc         (ReDoc)</pre>
                             <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #00f2fe;">
                                 <p style="color: #666; margin: 0 0 5px 0;">🎬 视频评分</p>
                                 <h3 style="color: #00f2fe; margin: 0;">${(data?.video_score || 0).toFixed(2)}</h3>
-                            </div>
-                            <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #38f9d7;">
-                                <p style="color: #666; margin: 0 0 5px 0;">🔊 音频评分</p>
-                                <h3 style="color: #38f9d7; margin: 0;">${(data?.audio_score || 0).toFixed(2)}</h3>
                             </div>
                             <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #667eea;">
                                 <p style="color: #666; margin: 0 0 5px 0;">📝 文本评分</p>

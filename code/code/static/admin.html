@@ -1,15 +1,21 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>管理端 - 新闻真实性核查系统</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background: #f5f7fa; 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
             height: 100vh;
             overflow: hidden;
         }
@@ -23,7 +29,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             position: fixed;
             top: 0;
             left: 0;
@@ -31,8 +37,8 @@
             z-index: 1000;
         }
 
-        .top-navbar-brand { 
-            font-size: 1.3em; 
+        .top-navbar-brand {
+            font-size: 1.3em;
             font-weight: bold;
             display: flex;
             align-items: center;
@@ -49,7 +55,7 @@
             width: 35px;
             height: 35px;
             border-radius: 50%;
-            background: rgba(255,255,255,0.3);
+            background: rgba(255, 255, 255, 0.3);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -57,8 +63,8 @@
         }
 
         .logout-btn {
-            background: rgba(255,255,255,0.2);
-            border: 1px solid rgba(255,255,255,0.5);
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.5);
             color: white;
             padding: 6px 15px;
             border-radius: 5px;
@@ -67,7 +73,7 @@
         }
 
         .logout-btn:hover {
-            background: rgba(255,255,255,0.3);
+            background: rgba(255, 255, 255, 0.3);
         }
 
         /* 主容器 */
@@ -83,7 +89,7 @@
             background: #2c3e50;
             color: white;
             overflow-y: auto;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
         }
 
         .sidebar-menu {
@@ -108,7 +114,7 @@
         }
 
         .sidebar-menu a:hover {
-            background: rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.1);
             border-left-color: #3498db;
         }
 
@@ -146,7 +152,7 @@
             border-radius: 10px;
             padding: 25px;
             margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         }
 
         .card h2 {
@@ -241,7 +247,7 @@
         button:hover {
             background: #2980b9;
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
         button.success {
@@ -339,6 +345,7 @@
         }
     </style>
 </head>
+
 <body>
     <!-- 顶部导航栏 -->
     <div class="top-navbar">
@@ -359,37 +366,37 @@
         <div class="sidebar">
             <ul class="sidebar-menu">
                 <li><a href="javascript:void(0);" onclick="switchSection('dashboard', event)" class="active">
-                    <span class="menu-icon">📊</span>
-                    <span>数据概览</span>
-                </a></li>
+                        <span class="menu-icon">📊</span>
+                        <span>数据概览</span>
+                    </a></li>
                 <li><a href="javascript:void(0);" onclick="switchSection('submissions', event)">
-                    <span class="menu-icon">📝</span>
-                    <span>新闻提交管理</span>
-                </a></li>
+                        <span class="menu-icon">📝</span>
+                        <span>新闻提交管理</span>
+                    </a></li>
                 <li><a href="javascript:void(0);" onclick="switchSection('analysis', event)">
-                    <span class="menu-icon">🔍</span>
-                    <span>分析结果管理</span>
-                </a></li>
+                        <span class="menu-icon">🔍</span>
+                        <span>分析结果管理</span>
+                    </a></li>
                 <li><a href="javascript:void(0);" onclick="switchSection('tasks', event)">
-                    <span class="menu-icon">✅</span>
-                    <span>核查员审核记录</span>
-                </a></li>
+                        <span class="menu-icon">✅</span>
+                        <span>核查员审核记录</span>
+                    </a></li>
                 <li><a href="javascript:void(0);" onclick="switchSection('users', event)">
-                    <span class="menu-icon">👥</span>
-                    <span>用户管理</span>
-                </a></li>
+                        <span class="menu-icon">👥</span>
+                        <span>用户管理</span>
+                    </a></li>
                 <li><a href="javascript:void(0);" onclick="switchSection('models', event)">
-                    <span class="menu-icon">🤖</span>
-                    <span>模型管理</span>
-                </a></li>
+                        <span class="menu-icon">🤖</span>
+                        <span>模型管理</span>
+                    </a></li>
                 <li><a href="javascript:void(0);" onclick="switchSection('policies', event)">
-                    <span class="menu-icon">⚙️</span>
-                    <span>策略配置</span>
-                </a></li>
+                        <span class="menu-icon">⚙️</span>
+                        <span>策略配置</span>
+                    </a></li>
                 <li><a href="javascript:void(0);" onclick="switchSection('reports', event)">
-                    <span class="menu-icon">📄</span>
-                    <span>报告管理</span>
-                </a></li>
+                        <span class="menu-icon">📄</span>
+                        <span>报告管理</span>
+                    </a></li>
             </ul>
         </div>
 
@@ -458,7 +465,8 @@
                     <h2>👥 用户管理</h2>
                     <div id="usersMessage" class="message" style="display:none;"></div>
                     <button onclick="showAddUserForm()" style="margin-bottom: 20px;">➕ 添加用户</button>
-                    <div id="addUserForm" style="display:none; margin-bottom: 20px; padding: 20px; background: #f8f9fa; border-radius: 8px;">
+                    <div id="addUserForm"
+                        style="display:none; margin-bottom: 20px; padding: 20px; background: #f8f9fa; border-radius: 8px;">
                         <h3>添加新用户</h3>
                         <div class="form-group">
                             <label>用户名</label>
@@ -474,7 +482,8 @@
                         </div>
                         <div class="form-group">
                             <label>用户权限</label>
-                            <select id="newUserRole" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 1em;">
+                            <select id="newUserRole"
+                                style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 1em;">
                                 <option value="user">👤 普通用户</option>
                                 <option value="verifier">🔍 信息核查员</option>
                                 <option value="admin">👑 管理员</option>
@@ -488,7 +497,8 @@
                         <button onclick="addUser()" class="success">保存</button>
                         <button onclick="hideAddUserForm()" class="danger">取消</button>
                     </div>
-                    <div id="editUserForm" style="display:none; margin-bottom: 20px; padding: 20px; background: #fff3cd; border-radius: 8px;">
+                    <div id="editUserForm"
+                        style="display:none; margin-bottom: 20px; padding: 20px; background: #fff3cd; border-radius: 8px;">
                         <h3>编辑用户</h3>
                         <input type="hidden" id="editUserId">
                         <div class="form-group">
@@ -505,7 +515,8 @@
                         </div>
                         <div class="form-group">
                             <label>用户权限</label>
-                            <select id="editUserRole" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 1em;">
+                            <select id="editUserRole"
+                                style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 1em;">
                                 <option value="user">👤 普通用户</option>
                                 <option value="verifier">🔍 信息核查员</option>
                                 <option value="admin">👑 管理员</option>
@@ -534,7 +545,8 @@
                     <div id="policiesMessage" class="message" style="display:none;"></div>
 
                     <!-- 评分标准说明 -->
-                    <div style="background: #e8f4fd; padding: 20px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #1976d2;">
+                    <div
+                        style="background: #e8f4fd; padding: 20px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #1976d2;">
                         <h3 style="color: #1976d2; margin: 0 0 15px 0;">📊 评分判定标准（三分类）</h3>
                         <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
                             <div style="background: #d4edda; padding: 15px; border-radius: 8px; text-align: center;">
@@ -559,7 +571,8 @@
                     <div style="background: #f5f5f5; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
                         <h3 style="color: #333; margin: 0 0 15px 0;">🔧 当前系统模态分析配置</h3>
 
-                        <div style="margin-bottom: 15px; padding: 15px; background: white; border-radius: 8px; border-left: 4px solid #4a90e2;">
+                        <div
+                            style="margin-bottom: 15px; padding: 15px; background: white; border-radius: 8px; border-left: 4px solid #4a90e2;">
                             <h4 style="color: #4a90e2; margin: 0 0 10px 0;">📝 纯文本输入</h4>
                             <p style="margin: 5px 0; color: #666;">• 训练模型预测: <strong>40%</strong></p>
                             <p style="margin: 5px 0; color: #666;">• 标题一致性检测: <strong>20%</strong></p>
@@ -569,7 +582,8 @@
                             <p style="margin: 5px 0; color: #666;">• 矛盾检测: <strong>5%</strong></p>
                         </div>
 
-                        <div style="margin-bottom: 15px; padding: 15px; background: white; border-radius: 8px; border-left: 4px solid #28a745;">
+                        <div
+                            style="margin-bottom: 15px; padding: 15px; background: white; border-radius: 8px; border-left: 4px solid #28a745;">
                             <h4 style="color: #28a745; margin: 0 0 10px 0;">📝+🧠 文本+LLM辅助分析</h4>
                             <p style="margin: 5px 0; color: #666;">• 训练模型预测: <strong>30%</strong></p>
                             <p style="margin: 5px 0; color: #666;">• LLM大模型分析: <strong>25%</strong></p>
@@ -580,19 +594,20 @@
                             <p style="margin: 5px 0; color: #666;">• 矛盾检测: <strong>5%</strong></p>
                         </div>
 
-                        <div style="margin-bottom: 15px; padding: 15px; background: white; border-radius: 8px; border-left: 4px solid #ff9800;">
+                        <div
+                            style="margin-bottom: 15px; padding: 15px; background: white; border-radius: 8px; border-left: 4px solid #ff9800;">
                             <h4 style="color: #ff9800; margin: 0 0 10px 0;">📝+🖼️ 文本+图像多模态</h4>
                             <p style="margin: 5px 0; color: #666;">• 文本分析: <strong>40%</strong></p>
                             <p style="margin: 5px 0; color: #666;">• 图像分析: <strong>30%</strong></p>
                             <p style="margin: 5px 0; color: #666;">• 跨模态一致性: <strong>30%</strong></p>
                         </div>
 
-                        <div style="padding: 15px; background: white; border-radius: 8px; border-left: 4px solid #9c27b0;">
-                            <h4 style="color: #9c27b0; margin: 0 0 10px 0;">🎬+🔊 视频/音频分析</h4>
-                            <p style="margin: 5px 0; color: #666;">• 文本分析: <strong>40%</strong></p>
-                            <p style="margin: 5px 0; color: #666;">• 视频分析: <strong>25%</strong></p>
-                            <p style="margin: 5px 0; color: #666;">• 音频分析: <strong>20%</strong></p>
-                            <p style="margin: 5px 0; color: #666;">• 图像分析: <strong>15%</strong></p>
+                        <div
+                            style="padding: 15px; background: white; border-radius: 8px; border-left: 4px solid #9c27b0;">
+                            <h4 style="color: #9c27b0; margin: 0 0 10px 0;">🎬 视频分析</h4>
+                            <p style="margin: 5px 0; color: #666;">• 文本分析: <strong>45%</strong></p>
+                            <p style="margin: 5px 0; color: #666;">• 视频分析: <strong>35%</strong></p>
+                            <p style="margin: 5px 0; color: #666;">• 图像分析: <strong>20%</strong></p>
                         </div>
                     </div>
 
@@ -610,10 +625,7 @@
                         <label>视频分析权重 (%)</label>
                         <input type="number" id="videoWeight" value="20" min="0" max="100">
                     </div>
-                    <div class="form-group">
-                        <label>音频分析权重 (%)</label>
-                        <input type="number" id="audioWeight" value="10" min="0" max="100">
-                    </div>
+
                     <p style="color: #888; font-size: 12px; margin-bottom: 15px;">注：权重总和应为100%，系统会自动归一化处理</p>
                     <button onclick="savePolicies()" class="success">保存策略</button>
                 </div>
@@ -658,27 +670,27 @@
         } else {
             // 验证是否是管理员
             fetch('/api/users/me', {
-                headers: {'Authorization': 'Bearer ' + token}
+                headers: { 'Authorization': 'Bearer ' + token }
             })
-            .then(r => {
-                if (!r.ok) throw new Error('未授权');
-                return r.json();
-            })
-            .then(user => {
-                if (!user.is_admin) {
-                    alert('您没有权限访问管理端！');
+                .then(r => {
+                    if (!r.ok) throw new Error('未授权');
+                    return r.json();
+                })
+                .then(user => {
+                    if (!user.is_admin) {
+                        alert('您没有权限访问管理端！');
+                        window.location.href = '/';
+                    }
+                })
+                .catch(e => {
+                    alert('登录已过期，请重新登录！');
+                    localStorage.removeItem('token');
                     window.location.href = '/';
-                }
-            })
-            .catch(e => {
-                alert('登录已过期，请重新登录！');
-                localStorage.removeItem('token');
-                window.location.href = '/';
-            });
+                });
         }
 
         // 页面加载时初始化
-        window.onload = function() {
+        window.onload = function () {
             loadDashboard();
         };
 
@@ -696,7 +708,7 @@
             }
 
             // 加载对应数据
-            switch(section) {
+            switch (section) {
                 case 'dashboard':
                     loadDashboard();
                     break;
@@ -721,16 +733,16 @@
         // 加载数据概览
         function loadDashboard() {
             fetch('/api/admin/stats', {
-                headers: {'Authorization': `Bearer ${token}`}
+                headers: { 'Authorization': `Bearer ${token}` }
             })
-            .then(r => r.json())
-            .then(data => {
-                document.getElementById('totalUsers').textContent = data.total_users;
-                document.getElementById('totalSubmissions').textContent = data.total_submissions;
-                document.getElementById('totalAnalysis').textContent = data.total_analysis;
-                document.getElementById('totalModels').textContent = data.total_models;
-            })
-            .catch(e => console.error('加载统计失败:', e));
+                .then(r => r.json())
+                .then(data => {
+                    document.getElementById('totalUsers').textContent = data.total_users;
+                    document.getElementById('totalSubmissions').textContent = data.total_submissions;
+                    document.getElementById('totalAnalysis').textContent = data.total_analysis;
+                    document.getElementById('totalModels').textContent = data.total_models;
+                })
+                .catch(e => console.error('加载统计失败:', e));
 
             // 加载最近活动
             loadRecentActivity();
@@ -739,43 +751,43 @@
         // 加载最近活动
         function loadRecentActivity() {
             fetch('/api/submissions', {
-                headers: {'Authorization': `Bearer ${token}`}
+                headers: { 'Authorization': `Bearer ${token}` }
             })
-            .then(r => r.json())
-            .then(data => {
-                const recent = data.slice(-5).reverse();
-                let html = '<table><tr><th>ID</th><th>标题</th><th>状态</th><th>创建时间</th></tr>';
-                recent.forEach(item => {
-                    const statusClass = item.status === 'completed' || item.status === 'verified_approved' ? 'completed' :
-                                       item.status === 'verified_rejected' ? 'rejected' : 'pending';
-                    html += `<tr>
+                .then(r => r.json())
+                .then(data => {
+                    const recent = data.slice(-5).reverse();
+                    let html = '<table><tr><th>ID</th><th>标题</th><th>状态</th><th>创建时间</th></tr>';
+                    recent.forEach(item => {
+                        const statusClass = item.status === 'completed' || item.status === 'verified_approved' ? 'completed' :
+                            item.status === 'verified_rejected' ? 'rejected' : 'pending';
+                        html += `<tr>
                         <td>${item.id}</td>
                         <td>${item.title}</td>
                         <td><span class="badge ${statusClass}">${getStatusText(item.status)}</span></td>
                         <td>${new Date(item.created_at).toLocaleString()}</td>
                     </tr>`;
+                    });
+                    html += '</table>';
+                    document.getElementById('recentActivity').innerHTML = html;
+                })
+                .catch(e => {
+                    console.error('加载最近活动失败:', e);
+                    document.getElementById('recentActivity').innerHTML = '<p style="color: red;">加载失败</p>';
                 });
-                html += '</table>';
-                document.getElementById('recentActivity').innerHTML = html;
-            })
-            .catch(e => {
-                console.error('加载最近活动失败:', e);
-                document.getElementById('recentActivity').innerHTML = '<p style="color: red;">加载失败</p>';
-            });
         }
 
         // 加载新闻提交
         function loadSubmissions() {
             fetch('/api/submissions', {
-                headers: {'Authorization': `Bearer ${token}`}
+                headers: { 'Authorization': `Bearer ${token}` }
             })
-            .then(r => r.json())
-            .then(data => {
-                let html = '<table><tr><th>ID</th><th>标题</th><th>内容</th><th>状态</th><th>创建时间</th><th>操作</th></tr>';
-                data.forEach(item => {
-                    const statusClass = item.status === 'completed' || item.status === 'verified_approved' ? 'completed' :
-                                       item.status === 'verified_rejected' ? 'rejected' : 'pending';
-                    html += `<tr>
+                .then(r => r.json())
+                .then(data => {
+                    let html = '<table><tr><th>ID</th><th>标题</th><th>内容</th><th>状态</th><th>创建时间</th><th>操作</th></tr>';
+                    data.forEach(item => {
+                        const statusClass = item.status === 'completed' || item.status === 'verified_approved' ? 'completed' :
+                            item.status === 'verified_rejected' ? 'rejected' : 'pending';
+                        html += `<tr>
                         <td>${item.id}</td>
                         <td>${item.title}</td>
                         <td>${item.content.substring(0, 50)}...</td>
@@ -783,81 +795,81 @@
                         <td>${new Date(item.created_at).toLocaleString()}</td>
                         <td><button onclick="viewSubmission(${item.id})">查看</button></td>
                     </tr>`;
+                    });
+                    html += '</table>';
+                    document.getElementById('submissionsList').innerHTML = html;
+                })
+                .catch(e => {
+                    console.error('加载新闻提交失败:', e);
+                    document.getElementById('submissionsList').innerHTML = '<p style="color: red;">加载失败</p>';
                 });
-                html += '</table>';
-                document.getElementById('submissionsList').innerHTML = html;
-            })
-            .catch(e => {
-                console.error('加载新闻提交失败:', e);
-                document.getElementById('submissionsList').innerHTML = '<p style="color: red;">加载失败</p>';
-            });
         }
 
         // 查看提交详情
         function viewSubmission(id) {
             fetch(`/api/submissions/${id}`, {
-                headers: {'Authorization': `Bearer ${token}`}
+                headers: { 'Authorization': `Bearer ${token}` }
             })
-            .then(r => r.json())
-            .then(data => {
-                alert(`标题: ${data.title}\n内容: ${data.content}\n状态: ${getStatusText(data.status)}`);
-            });
+                .then(r => r.json())
+                .then(data => {
+                    alert(`标题: ${data.title}\n内容: ${data.content}\n状态: ${getStatusText(data.status)}`);
+                });
         }
 
         // 加载分析结果
         function loadAnalysis() {
             fetch('/api/submissions', {
-                headers: {'Authorization': `Bearer ${token}`}
+                headers: { 'Authorization': `Bearer ${token}` }
             })
-            .then(r => r.json())
-            .then(data => {
-                const completed = data.filter(item => item.status === 'completed');
-                let html = '<table><tr><th>提交ID</th><th>标题</th><th>状态</th><th>操作</th></tr>';
-                completed.forEach(item => {
-                    html += `<tr>
+                .then(r => r.json())
+                .then(data => {
+                    const completed = data.filter(item => item.status === 'completed');
+                    let html = '<table><tr><th>提交ID</th><th>标题</th><th>状态</th><th>操作</th></tr>';
+                    completed.forEach(item => {
+                        html += `<tr>
                         <td>${item.id}</td>
                         <td>${item.title}</td>
                         <td><span class="badge completed">已完成</span></td>
                         <td><button onclick="viewAnalysisResult(${item.id})">查看分析</button></td>
                     </tr>`;
+                    });
+                    html += '</table>';
+                    document.getElementById('analysisList').innerHTML = html;
+                })
+                .catch(e => {
+                    document.getElementById('analysisList').innerHTML = '<p style="color: red;">加载失败</p>';
                 });
-                html += '</table>';
-                document.getElementById('analysisList').innerHTML = html;
-            })
-            .catch(e => {
-                document.getElementById('analysisList').innerHTML = '<p style="color: red;">加载失败</p>';
-            });
         }
 
         // 查看分析结果
         function viewAnalysisResult(submissionId) {
             // 获取提交详情和分析结果
             fetch(`/api/submissions/${submissionId}`, {
-                headers: {'Authorization': `Bearer ${token}`}
+                headers: { 'Authorization': `Bearer ${token}` }
             })
-            .then(r => {
-                if (!r.ok) throw new Error('获取提交信息失败');
-                return r.json();
-            })
-            .then(submission => {
-                // 获取分析结果
-                fetch(`/api/analysis/${submissionId}`, {
-                    headers: {'Authorization': `Bearer ${token}`}
-                })
                 .then(r => {
-                    if (!r.ok) throw new Error('获取分析结果失败');
+                    if (!r.ok) throw new Error('获取提交信息失败');
                     return r.json();
                 })
-                .then(analysis => {
-                    showAnalysisDetail(submission, analysis);
+                .then(submission => {
+                    // 获取分析结果
+                    fetch(`/api/analysis/${submissionId}`, {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    })
+                        .then(r => {
+                            if (!r.ok) throw new Error('获取分析结果失败');
+                            return r.json();
+                        })
+                        .then(analysis => {
+                            showAnalysisDetail(submission, analysis);
+                        })
+                        .catch(e => {
+                            alert('获取分析结果失败: ' + e.message);
+                        });
                 })
                 .catch(e => {
-                    alert('获取分析结果失败: ' + e.message);
+                    alert('获取提交信息失败: ' + e.message);
                 });
-            })
-            .catch(e => {
-                alert('获取提交信息失败: ' + e.message);
-            });
         }
 
         // 显示分析结果详情
@@ -912,7 +924,6 @@
                     <p><strong>文本评分：</strong>${analysis.text_score ? analysis.text_score.toFixed(2) : '无'}</p>
                     <p><strong>图像评分：</strong>${analysis.image_score ? analysis.image_score.toFixed(2) : '无'}</p>
                     <p><strong>视频评分：</strong>${analysis.video_score ? analysis.video_score.toFixed(2) : '无'}</p>
-                    <p><strong>音频评分：</strong>${(analysis.audio_score || 0) ? (analysis.audio_score || 0).toFixed(2) : '无'}</p>
                     <p><strong>综合可信度：</strong><span style="font-size: 1.2em; font-weight: bold; color: ${scoreColor};">${overallScore.toFixed(2)} 分 - ${credibilityLabel}</span></p>
                     ${credibilityDesc ? `<p><strong>判定说明：</strong>${credibilityDesc}</p>` : ''}
                     ${analysis.modalities_used ? `<p><strong>使用模态：</strong>${analysis.modalities_used.join(', ')}</p>` : ''}
@@ -963,15 +974,7 @@
                 `;
             }
 
-            if ((analysis.audio_details || {})) {
-                const details = typeof (analysis.audio_details || {}) === 'string' ? JSON.parse((analysis.audio_details || {})) : (analysis.audio_details || {});
-                html += `
-                    <div style="background: #f8d7da; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-                        <h3 style="margin-top: 0; color: #721c24;">🎵 音频分析详情</h3>
-                        <pre style="background: white; padding: 10px; border-radius: 5px; overflow-x: auto;">${JSON.stringify(details, null, 2)}</pre>
-                    </div>
-                `;
-            }
+
 
             html += `
                 <div style="text-align: center; margin-top: 20px;">
@@ -994,20 +997,20 @@
         // 加载核查员审核记录
         function loadTasks() {
             fetch('/api/admin/verifications', {
-                headers: {'Authorization': `Bearer ${token}`}
+                headers: { 'Authorization': `Bearer ${token}` }
             })
-            .then(r => r.json())
-            .then(data => {
-                if (data.length === 0) {
-                    document.getElementById('tasksList').innerHTML = '<p style="color: #999; text-align: center;">暂无审核记录</p>';
-                    return;
-                }
+                .then(r => r.json())
+                .then(data => {
+                    if (data.length === 0) {
+                        document.getElementById('tasksList').innerHTML = '<p style="color: #999; text-align: center;">暂无审核记录</p>';
+                        return;
+                    }
 
-                let html = '<table><tr><th>审核ID</th><th>新闻标题</th><th>核查员</th><th>审核状态</th><th>调整评分</th><th>审核意见</th><th>审核时间</th><th>操作</th></tr>';
-                data.forEach(record => {
-                    const statusClass = record.verification_status === '已批准' ? 'approved' :
-                                       record.verification_status === '已拒绝' ? 'rejected' : 'pending';
-                    html += `<tr>
+                    let html = '<table><tr><th>审核ID</th><th>新闻标题</th><th>核查员</th><th>审核状态</th><th>调整评分</th><th>审核意见</th><th>审核时间</th><th>操作</th></tr>';
+                    data.forEach(record => {
+                        const statusClass = record.verification_status === '已批准' ? 'approved' :
+                            record.verification_status === '已拒绝' ? 'rejected' : 'pending';
+                        html += `<tr>
                         <td>${record.id}</td>
                         <td>${record.submission_title}</td>
                         <td>${record.verifier_name}</td>
@@ -1017,14 +1020,14 @@
                         <td>${new Date(record.created_at).toLocaleString()}</td>
                         <td><button onclick="viewVerificationDetail(${record.submission_id})" class="success">📋 查看详情</button></td>
                     </tr>`;
+                    });
+                    html += '</table>';
+                    document.getElementById('tasksList').innerHTML = html;
+                })
+                .catch(e => {
+                    console.error('加载审核记录失败:', e);
+                    document.getElementById('tasksList').innerHTML = '<p style="color: red;">加载失败</p>';
                 });
-                html += '</table>';
-                document.getElementById('tasksList').innerHTML = html;
-            })
-            .catch(e => {
-                console.error('加载审核记录失败:', e);
-                document.getElementById('tasksList').innerHTML = '<p style="color: red;">加载失败</p>';
-            });
         }
 
         // 查看审核详情
@@ -1032,23 +1035,23 @@
             // 获取提交详情
             Promise.all([
                 fetch(`/api/submissions/${submissionId}`, {
-                    headers: {'Authorization': `Bearer ${token}`}
+                    headers: { 'Authorization': `Bearer ${token}` }
                 }).then(r => r.json()),
                 fetch(`/api/analysis/${submissionId}`, {
-                    headers: {'Authorization': `Bearer ${token}`}
+                    headers: { 'Authorization': `Bearer ${token}` }
                 }).then(r => r.json()),
                 fetch(`/api/admin/verifications`, {
-                    headers: {'Authorization': `Bearer ${token}`}
+                    headers: { 'Authorization': `Bearer ${token}` }
                 }).then(r => r.json())
             ])
-            .then(([submission, analysis, verifications]) => {
-                // 找到该提交的审核记录
-                const verification = verifications.find(v => v.submission_id === submissionId);
-                showVerificationDetailModal(submission, analysis, verification);
-            })
-            .catch(e => {
-                alert('获取详情失败: ' + e.message);
-            });
+                .then(([submission, analysis, verifications]) => {
+                    // 找到该提交的审核记录
+                    const verification = verifications.find(v => v.submission_id === submissionId);
+                    showVerificationDetailModal(submission, analysis, verification);
+                })
+                .catch(e => {
+                    alert('获取详情失败: ' + e.message);
+                });
         }
 
         // 显示审核详情弹窗
@@ -1129,10 +1132,7 @@
                                 <div style="font-size: 12px; color: #666; margin-bottom: 5px;">视频评分</div>
                                 <div style="font-size: 24px; font-weight: bold; color: #17a2b8;">${analysis.video_score ? analysis.video_score.toFixed(1) : 'N/A'}</div>
                             </div>
-                            <div style="text-align: center; padding: 15px; background: #f8f9fa; border-radius: 8px;">
-                                <div style="font-size: 12px; color: #666; margin-bottom: 5px;">音频评分</div>
-                                <div style="font-size: 24px; font-weight: bold; color: #ffc107;">${(analysis.audio_score || 0) ? (analysis.audio_score || 0).toFixed(1) : 'N/A'}</div>
-                            </div>
+
                         </div>
                         <div style="text-align: center; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 8px; color: white;">
                             <div style="font-size: 14px; margin-bottom: 5px; opacity: 0.9;">综合可信度评分</div>
@@ -1185,20 +1185,7 @@
                 `;
             }
 
-            if ((analysis.audio_details || {})) {
-                const details = typeof (analysis.audio_details || {}) === 'string' ? JSON.parse((analysis.audio_details || {})) : (analysis.audio_details || {});
-                html += `
-                    <div style="margin-top: 15px; padding: 15px; background: #f8d7da; border-radius: 8px; border-left: 4px solid #721c24;">
-                        <h4 style="margin: 0 0 10px 0; color: #721c24;">🎵 音频分析详情</h4>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; font-size: 14px;">
-                            <div><strong>时长：</strong>${details.duration ? details.duration.toFixed(1) + '秒' : 'N/A'}</div>
-                            <div><strong>采样率：</strong>${details.sample_rate || 0}Hz</div>
-                            <div><strong>噪声水平：</strong>${details.noise_level || 0}</div>
-                            <div><strong>质量：</strong>${details.quality ? details.quality.toFixed(1) + '%' : 'N/A'}</div>
-                        </div>
-                    </div>
-                `;
-            }
+
 
             html += `
                         <p style="margin: 15px 0 0 0; font-size: 13px; color: #666;"><strong>分析时间：</strong>${new Date(analysis.created_at).toLocaleString()}</p>
@@ -1209,7 +1196,7 @@
             // 人工审核结果
             if (verification) {
                 const statusColor = verification.verification_status === '已批准' ? '#28a745' :
-                                   verification.verification_status === '已拒绝' ? '#dc3545' : '#ffc107';
+                    verification.verification_status === '已拒绝' ? '#dc3545' : '#ffc107';
                 html += `
                     <div style="background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%); padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                         <h3 style="margin-top: 0; color: #856404; display: flex; align-items: center; font-size: 20px;">
@@ -1271,24 +1258,24 @@
         // 加载用户列表
         function loadUsers() {
             fetch('/api/users', {
-                headers: {'Authorization': `Bearer ${token}`}
+                headers: { 'Authorization': `Bearer ${token}` }
             })
-            .then(r => r.json())
-            .then(data => {
-                let html = '<table><tr><th>ID</th><th>用户名</th><th>邮箱</th><th>角色</th><th>创建时间</th><th>操作</th></tr>';
-                data.forEach(user => {
-                    // 确定用户角色
-                    let roleText = '👤 普通用户';
-                    let roleColor = '#6c757d';
-                    if (user.is_admin) {
-                        roleText = '👑 管理员';
-                        roleColor = '#dc3545';
-                    } else if (user.is_verifier) {
-                        roleText = '🔍 核查员';
-                        roleColor = '#007bff';
-                    }
+                .then(r => r.json())
+                .then(data => {
+                    let html = '<table><tr><th>ID</th><th>用户名</th><th>邮箱</th><th>角色</th><th>创建时间</th><th>操作</th></tr>';
+                    data.forEach(user => {
+                        // 确定用户角色
+                        let roleText = '👤 普通用户';
+                        let roleColor = '#6c757d';
+                        if (user.is_admin) {
+                            roleText = '👑 管理员';
+                            roleColor = '#dc3545';
+                        } else if (user.is_verifier) {
+                            roleText = '🔍 核查员';
+                            roleColor = '#007bff';
+                        }
 
-                    html += `<tr>
+                        html += `<tr>
                         <td>${user.id}</td>
                         <td>${user.username}</td>
                         <td>${user.email || '未设置'}</td>
@@ -1299,13 +1286,13 @@
                             <button onclick="deleteUser(${user.id}, '${user.username}')" class="danger">🗑️ 删除</button>
                         </td>
                     </tr>`;
+                    });
+                    html += '</table>';
+                    document.getElementById('usersList').innerHTML = html;
+                })
+                .catch(e => {
+                    document.getElementById('usersList').innerHTML = '<p style="color: red;">加载失败</p>';
                 });
-                html += '</table>';
-                document.getElementById('usersList').innerHTML = html;
-            })
-            .catch(e => {
-                document.getElementById('usersList').innerHTML = '<p style="color: red;">加载失败</p>';
-            });
         }
 
         // 显示添加用户表单
@@ -1336,7 +1323,7 @@
 
             fetch('/api/auth/register', {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     username,
                     email,
@@ -1345,24 +1332,24 @@
                     is_verifier: isVerifier
                 })
             })
-            .then(r => {
-                if (!r.ok) {
-                    return r.json().then(err => { throw new Error(err.detail || '添加失败'); });
-                }
-                return r.json();
-            })
-            .then(data => {
-                const roleText = role === 'admin' ? '管理员' : role === 'verifier' ? '核查员' : '普通用户';
-                showMessage('usersMessage', `${roleText}账号添加成功`, 'success');
-                hideAddUserForm();
-                // 清空表单
-                document.getElementById('newUsername').value = '';
-                document.getElementById('newEmail').value = '';
-                document.getElementById('newPassword').value = '';
-                document.getElementById('newUserRole').value = 'user';
-                loadUsers();
-            })
-            .catch(e => showMessage('usersMessage', '添加失败: ' + e.message, 'error'));
+                .then(r => {
+                    if (!r.ok) {
+                        return r.json().then(err => { throw new Error(err.detail || '添加失败'); });
+                    }
+                    return r.json();
+                })
+                .then(data => {
+                    const roleText = role === 'admin' ? '管理员' : role === 'verifier' ? '核查员' : '普通用户';
+                    showMessage('usersMessage', `${roleText}账号添加成功`, 'success');
+                    hideAddUserForm();
+                    // 清空表单
+                    document.getElementById('newUsername').value = '';
+                    document.getElementById('newEmail').value = '';
+                    document.getElementById('newPassword').value = '';
+                    document.getElementById('newUserRole').value = 'user';
+                    loadUsers();
+                })
+                .catch(e => showMessage('usersMessage', '添加失败: ' + e.message, 'error'));
         }
 
         // 显示编辑用户表单
@@ -1423,22 +1410,22 @@
                 },
                 body: formData
             })
-            .then(r => {
-                if (!r.ok) {
-                    return r.json().then(data => {
-                        throw new Error(data.detail || '更新失败');
-                    });
-                }
-                return r.json();
-            })
-            .then(data => {
-                showMessage('usersMessage', '✅ 更新成功！', 'success');
-                hideEditUserForm();
-                loadUsers();
-            })
-            .catch(e => {
-                showMessage('usersMessage', '❌ ' + e.message, 'error');
-            });
+                .then(r => {
+                    if (!r.ok) {
+                        return r.json().then(data => {
+                            throw new Error(data.detail || '更新失败');
+                        });
+                    }
+                    return r.json();
+                })
+                .then(data => {
+                    showMessage('usersMessage', '✅ 更新成功！', 'success');
+                    hideEditUserForm();
+                    loadUsers();
+                })
+                .catch(e => {
+                    showMessage('usersMessage', '❌ ' + e.message, 'error');
+                });
         }
 
         // 删除用户
@@ -1455,38 +1442,38 @@
                     'Authorization': `Bearer ${token}`
                 }
             })
-            .then(r => {
-                if (!r.ok) {
-                    return r.json().then(data => {
-                        throw new Error(data.detail || '删除失败');
-                    });
-                }
-                return r.json();
-            })
-            .then(data => {
-                showMessage('usersMessage', '✅ 用户已删除！', 'success');
-                loadUsers();
-            })
-            .catch(e => {
-                showMessage('usersMessage', '❌ ' + e.message, 'error');
-            });
+                .then(r => {
+                    if (!r.ok) {
+                        return r.json().then(data => {
+                            throw new Error(data.detail || '删除失败');
+                        });
+                    }
+                    return r.json();
+                })
+                .then(data => {
+                    showMessage('usersMessage', '✅ 用户已删除！', 'success');
+                    loadUsers();
+                })
+                .catch(e => {
+                    showMessage('usersMessage', '❌ ' + e.message, 'error');
+                });
         }
 
         // 加载模型列表
         function loadModels() {
             fetch('/api/admin/models', {
-                headers: {'Authorization': `Bearer ${token}`}
+                headers: { 'Authorization': `Bearer ${token}` }
             })
-            .then(r => r.json())
-            .then(data => {
-                let html = '<div style="margin-bottom: 20px; padding: 15px; background: #e3f2fd; border-left: 4px solid #2196F3; border-radius: 4px;">';
-                html += '<h3 style="margin: 0 0 10px 0; color: #1976D2;">🤖 系统分析模型</h3>';
-                html += '<p style="margin: 0; color: #555;">以下是系统中使用的分析模型</p>';
-                html += '</div>';
+                .then(r => r.json())
+                .then(data => {
+                    let html = '<div style="margin-bottom: 20px; padding: 15px; background: #e3f2fd; border-left: 4px solid #2196F3; border-radius: 4px;">';
+                    html += '<h3 style="margin: 0 0 10px 0; color: #1976D2;">🤖 系统分析模型</h3>';
+                    html += '<p style="margin: 0; color: #555;">以下是系统中使用的分析模型</p>';
+                    html += '</div>';
 
-                html += '<table><tr><th>模型名称</th><th>类型</th><th>版本</th><th>准确率</th><th>描述</th><th>状态</th></tr>';
-                data.forEach(model => {
-                    html += `<tr>
+                    html += '<table><tr><th>模型名称</th><th>类型</th><th>版本</th><th>准确率</th><th>描述</th><th>状态</th></tr>';
+                    data.forEach(model => {
+                        html += `<tr>
                         <td>${model.name}</td>
                         <td>${model.model_type}</td>
                         <td>${model.version}</td>
@@ -1494,14 +1481,14 @@
                         <td>${model.description}</td>
                         <td>${model.status}</td>
                     </tr>`;
-                });
-                html += '</table>';
+                    });
+                    html += '</table>';
 
-                document.getElementById('modelsList').innerHTML = html;
-            })
-            .catch(e => {
-                document.getElementById('modelsList').innerHTML = '<p style="color: red;">加载失败</p>';
-            });
+                    document.getElementById('modelsList').innerHTML = html;
+                })
+                .catch(e => {
+                    document.getElementById('modelsList').innerHTML = '<p style="color: red;">加载失败</p>';
+                });
         }
 
         // 保存策略
@@ -1509,8 +1496,7 @@
             const policies = {
                 text_weight: parseInt(document.getElementById('textWeight').value),
                 image_weight: parseInt(document.getElementById('imageWeight').value),
-                video_weight: parseInt(document.getElementById('videoWeight').value),
-                audio_weight: parseInt(document.getElementById('audioWeight').value)
+                video_weight: parseInt(document.getElementById('videoWeight').value)
             };
 
             fetch('/api/admin/policies', {
@@ -1521,11 +1507,11 @@
                 },
                 body: JSON.stringify(policies)
             })
-            .then(r => r.json())
-            .then(data => {
-                showMessage('policiesMessage', '策略保存成功', 'success');
-            })
-            .catch(e => showMessage('policiesMessage', '保存失败', 'error'));
+                .then(r => r.json())
+                .then(data => {
+                    showMessage('policiesMessage', '策略保存成功', 'success');
+                })
+                .catch(e => showMessage('policiesMessage', '保存失败', 'error'));
         }
 
         // 生成PDF报告
@@ -1549,19 +1535,19 @@
             }
 
             fetch(`/api/reports/${submissionId}?format=json`, {
-                headers: {'Authorization': `Bearer ${token}`}
+                headers: { 'Authorization': `Bearer ${token}` }
             })
-            .then(r => r.json())
-            .then(data => {
-                const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `report_${submissionId}.json`;
-                a.click();
-                showMessage('reportsMessage', 'JSON报告已下载', 'success');
-            })
-            .catch(e => showMessage('reportsMessage', '生成失败', 'error'));
+                .then(r => r.json())
+                .then(data => {
+                    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `report_${submissionId}.json`;
+                    a.click();
+                    showMessage('reportsMessage', 'JSON报告已下载', 'success');
+                })
+                .catch(e => showMessage('reportsMessage', '生成失败', 'error'));
         }
 
         // 显示消息
@@ -1583,5 +1569,5 @@
         }
     </script>
 </body>
-</html>
 
+</html>

@@ -725,10 +725,6 @@
                                 <div style="color: rgba(255,255,255,0.9); font-size: 0.95em; margin-bottom: 8px; font-weight: 500;">🎬 视频评分</div>
                                 <div style="color: white; font-size: 2.2em; font-weight: bold;">${analysis.video_score.toFixed(2)}</div>
                             </div>
-                            <div style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); padding: 20px; border-radius: 10px; text-align: center; box-shadow: 0 4px 10px rgba(56, 249, 215, 0.3);">
-                                <div style="color: rgba(255,255,255,0.9); font-size: 0.95em; margin-bottom: 8px; font-weight: 500;">🔊 音频评分</div>
-                                <div style="color: white; font-size: 2.2em; font-weight: bold;">${(analysis.audio_score || 0).toFixed(2)}</div>
-                            </div>
                         </div>
 
                         <!-- 综合评分 -->
@@ -903,10 +899,6 @@
                             <div class="analysis-item">
                                 <h4>视频评分</h4>
                                 <p>${(analysis?.video_score || 0).toFixed(2)}</p>
-                            </div>
-                            <div class="analysis-item">
-                                <h4>音频评分</h4>
-                                <p>${(analysis.audio_score || 0).toFixed(2)}</p>
                             </div>
                             <div class="analysis-item">
                                 <h4>综合评分</h4>

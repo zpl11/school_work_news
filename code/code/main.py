@@ -316,7 +316,7 @@ def delete_user(
 @app.post("/api/submissions", response_model=NewsSubmissionResponse)
 async def create_submission(
     title: str = Form(...),
-    content: str = Form(...),
+    content: str = Form(None),
     file: UploadFile = File(None),
     is_self_check: bool = Form(False),  # 新增：是否为自检模式
     user_id: int = Form(None),  # 可选的user_id参数（用于测试）
@@ -339,6 +339,10 @@ async def create_submission(
         user_id = 1
 
     file_path = None
+    
+    # 确保content不为None
+    if content is None:
+        content = ""
 
     # 处理文件上传
     if file and file.filename:
@@ -527,7 +531,15 @@ def analyze_submission(submission_id: int, db: Session = Depends(get_db)):
         image_text_consistency_score = None
 
         # 1. 真实文本分析（含标题-正文一致性检测）
-        if submission.content and len(submission.content.strip()) >= 5:
+        # 增加长度限制，并检查是否只有空白符或重复字符（如 "111"）
+        is_meaningful_content = False
+        if submission.content:
+            clean_content = submission.content.strip()
+            # 设置更高的长度阈值，例如20个字符，且不仅仅是重复字符
+            if len(clean_content) >= 10 and len(set(clean_content)) > 2:
+                is_meaningful_content = True
+
+        if is_meaningful_content:
             try:
                 # 传入标题进行一致性检测
                 text_result = text_analyzer.analyze(submission.content, title=submission.title)
@@ -537,6 +549,10 @@ def analyze_submission(submission_id: int, db: Session = Depends(get_db)):
                 logger.error(f"文本分析错误: {e}")
                 text_result = {"length": 0, "words": 0, "sentiment": 0.5, "contradiction": 0, "length_score": 0, "keyword_score": 0, "score": 0}
                 text_score = 0
+        else:
+            # 如果没有有意义的内容，跳过文本得分
+            text_score = 0
+            text_result = {"length": len(submission.content) if submission.content else 0, "words": 0, "info": "内容过短或无效，跳过文本分析"}
 
         # 2. 真实图像分析（含图片-文本一致性检测）
         if submission.file_path:
